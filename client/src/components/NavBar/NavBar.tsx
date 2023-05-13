@@ -24,7 +24,7 @@ export const NavBar = () => {
                   {_isAuth ? (
                      <>
                         <Button variant={"outline-light"}>Панель администратора</Button>
-                        <Button className="ml-2" variant={"outline-light"} >Выйти</Button>
+                        <Button className="ms-2" variant={"outline-light"} >Выйти</Button>
                      </>
                   ) : (
                      <>
