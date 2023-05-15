@@ -13,13 +13,18 @@ export const BrandBar = () => {
 
    const currentBrand = searchParams.get("brand");
 
+   const onChooseBrand = (value: string) => {
+      searchParams.set('brand', value);
+      setSearchParams(searchParams);
+   }
+
    return (
       <Form className="d-flex flex-wrap gap-2">
          {brands.map((brand) => (
             <Card
                key={brand.id}
                className={clsx("p-3", styles.card)}
-               onClick={() => setSearchParams({brand: brand.query})}
+               onClick={() => onChooseBrand(brand.query)}
                bg={currentBrand === brand.query ? "primary" : ""}
                text={currentBrand === brand.query ? "light" : undefined}
             >

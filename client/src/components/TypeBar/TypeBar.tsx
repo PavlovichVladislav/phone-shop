@@ -9,6 +9,11 @@ export const TypeBar = () => {
 
    const currentType = searchParams.get("type");
 
+   const onChooseType= (value: string) => {
+      searchParams.set('type', value);
+      setSearchParams(searchParams);
+   }
+
    return (
       <ListGroup className="mt-3">
          {types.map((type, i) => (
@@ -16,7 +21,7 @@ export const TypeBar = () => {
                key={type.id}
                active={currentType === type.query}
                action
-               onClick={() => setSearchParams({ type: type.query })}
+               onClick={() => onChooseType(type.query)}
             //    variant="light"
             >
                {type.name}
