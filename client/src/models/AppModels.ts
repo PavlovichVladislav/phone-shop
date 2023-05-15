@@ -6,11 +6,13 @@ export interface IUser {
 export interface IType {
     id: number;
     name: string;
+    query: string;
 }
 
 export interface IBrand {
     id: number;
     name: string;
+    query: string;
 }
 
 export interface IDevice {

@@ -9,9 +9,9 @@ export const AppRouter = () => {
 
    return (
       <Routes>
-         {_isAuth && authRoutes.map(({ element, path }) => <Route path={path} element={element} />)}
+         {_isAuth && authRoutes.map(({ element, path }) => <Route path={path} element={element} key={path} />)}
          {publicRoutes.map(({ element, path }) => (
-            <Route path={path} element={element} />
+            <Route path={path} element={element} key={path} />
          ))}
       </Routes>
    );

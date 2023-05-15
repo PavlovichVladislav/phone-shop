@@ -10,8 +10,18 @@ export interface DeviceState {
 }
 
 const initialState: DeviceState = {
-   types: [],
-   brands: [],
+   types: [
+      { id: 1, name: "Холодильники", query: "fridge" },
+      { id: 2, name: "Телефоны", query: "phone" },
+      { id: 3, name: "Ноутбкуки", query: "laptop" },
+      { id: 4, name: "Телевизоры", query: "tv" },
+   ],
+   brands: [
+      { id: 1, name: "Samsung", query: "samsung" },
+      { id: 2, name: "Apple", query: "apple" },
+      { id: 3, name: "One plus", query: "onePlus" },
+      { id: 4, name: "Huawei", query: "huawei" }
+   ],
    devices: [],
 };
 
