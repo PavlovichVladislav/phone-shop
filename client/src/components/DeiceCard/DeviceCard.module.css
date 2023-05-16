@@ -1,0 +1,35 @@
+.card {
+    width: 220px;
+}
+
+.image {
+    padding: 4px;
+    height: 180px;
+    width: 100%;
+    object-fit: contain;
+    cursor: pointer;
+}
+
+.rating {
+    margin-right: 4px;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subtitle {
+    margin-top: 0;
+    color: #8d8d92;
+}
+
+.star {
+    width: 20px;
+    height: 20px;
+}
+
+.button {
+    width: 100%;
+}

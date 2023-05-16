@@ -15,7 +15,7 @@ export const TypeBar = () => {
    }
 
    return (
-      <ListGroup className="mt-3">
+      <ListGroup>
          {types.map((type, i) => (
             <ListGroup.Item
                key={type.id}

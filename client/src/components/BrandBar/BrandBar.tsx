@@ -23,7 +23,7 @@ export const BrandBar = () => {
          {brands.map((brand) => (
             <Card
                key={brand.id}
-               className={clsx("p-3", styles.card)}
+               className={clsx("p-2", styles.card)}
                onClick={() => onChooseBrand(brand.query)}
                bg={currentBrand === brand.query ? "primary" : ""}
                text={currentBrand === brand.query ? "light" : undefined}
