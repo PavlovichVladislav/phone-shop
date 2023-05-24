@@ -1,0 +1,13 @@
+.star {
+    background: url("../../assets/Star\ 1.png") no-repeat center center;
+    width: 280px;
+    height: 280px;
+    font-size: 64px;
+}
+
+.card {
+    width: 300px;
+    height: 150px;
+    font-size: 32px;
+    border: 1px solid #000;
+}
