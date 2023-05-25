@@ -5,13 +5,15 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 
 import { useAppSelector } from "../../hooks/reduxHooks";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import styles from "./NavBar.module.css";
 import { Button } from "react-bootstrap";
+import { ADMIN_ROUTE, LOGIN_ROUTE } from "../../utils/constants";
 
 export const NavBar = () => {
    const { _isAuth, user } = useAppSelector((state) => state.user);
+   const navigate = useNavigate();
 
    return (
       <>
@@ -23,8 +25,16 @@ export const NavBar = () => {
                <Nav className="ml-auto">
                   {_isAuth ? (
                      <>
-                        <Button variant={"outline-light"}>Панель администратора</Button>
-                        <Button className="ms-2" variant={"outline-light"} >Выйти</Button>
+                        <Button variant={"outline-light"} onClick={() => navigate(ADMIN_ROUTE)}>
+                           Панель администратора
+                        </Button>
+                        <Button
+                           className="ms-2"
+                           variant={"outline-light"}
+                           onClick={() => navigate(LOGIN_ROUTE)}
+                        >
+                           Выйти
+                        </Button>
                      </>
                   ) : (
                      <>
