@@ -9,8 +9,8 @@ export const DeviceList = () => {
    return (
       <Row className="d-flex p-3">
          {devices.map((device) => (
-            <Col md={3}>
-               <DeviceCard key={device.id} device={device} />
+            <Col key={device.id} md={3}>
+               <DeviceCard device={device} />
             </Col>
          ))}
       </Row>
