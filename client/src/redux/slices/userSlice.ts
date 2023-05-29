@@ -9,8 +9,9 @@ export interface UserState {
 }
 
 const initialState: UserState = {
-   _isAuth: true,
+   _isAuth: false,
    user: {
+      id: 0,
       email: "",
       role: "",
    },
@@ -29,6 +30,6 @@ export const userSlice = createSlice({
    },
 });
 
-export const { setIsAuth } = userSlice.actions;
+export const { setIsAuth, setUser } = userSlice.actions;
 
 export default userSlice.reducer;
