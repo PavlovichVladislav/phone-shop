@@ -4,6 +4,8 @@ export interface IUser {
     role: string;
 }
 
+export type TUser = IUser | {};
+
 export interface IType {
     id: number;
     name: string;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Button, Card, Container, Form, Row } from "react-bootstrap";
 
@@ -8,7 +8,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { LOGIN_ROUTE, REG_ROUTE } from "../../utils/constants";
 import { login, registration } from "../../http/userApi";
 import { useAppDispatch } from "../../hooks/reduxHooks";
-import { IUser } from "../../models/AppModels";
+import { TUser } from "../../models/AppModels";
 import { setIsAuth, setUser } from "../../redux/slices/userSlice";
 import { AxiosError } from "axios";
 
@@ -21,13 +21,14 @@ export const Auth = () => {
 
    const isLogin = pathname === LOGIN_ROUTE;
 
+   useEffect(() => {
+      setEmail("");
+      setPassword("");
+   }, [isLogin]);
+
    const handleBtnClick = async () => {
       try {
-         let user: IUser = {
-            id: 0,
-            email: "",
-            role: "",
-         };
+         let user: TUser = {};
 
          if (isLogin) {
             user = await login(email, password);

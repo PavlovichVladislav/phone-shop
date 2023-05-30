@@ -6,26 +6,29 @@ interface authResponse {
    token: string;
 }
 
-export const registration = async (email: string, password: string) => {
+export const registration = async (regEmail: string, password: string): Promise<IUser> => {
    const { data } = await $host.post<authResponse>("api/user/registration", {
-      email,
+      email: regEmail,
       password,
       role: "ADMIN",
    });
    localStorage.setItem("token", data.token);
+   const { id, email, role } = jwtDecode<IUser>(data.token);
 
-   return jwtDecode<IUser>(data.token);
+   return { id, email, role };
 };
 
-export const login = async (email: string, password: string) => {
-   const { data } = await $host.post<authResponse>("api/user/login", { email, password });
+export const login = async (logEmail: string, password: string): Promise<IUser> => {
+   const { data } = await $host.post<authResponse>("api/user/login", { email: logEmail, password });
    localStorage.setItem("token", data.token);
+   const { id, email, role } = jwtDecode<IUser>(data.token);
 
-   return jwtDecode<IUser>(data.token);
+   return { id, email, role };
 };
 
-export const check = async () => {
-   const response = await $host.get("api/user/auth");
+export const check = async (): Promise<IUser> => {
+   const { data } = await $host.get<authResponse>("api/user/auth");
+   const { id, email, role } = jwtDecode<IUser>(data.token);
 
-   return response;
+   return { id, email, role };
 };

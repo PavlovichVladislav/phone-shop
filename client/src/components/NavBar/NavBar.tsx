@@ -10,7 +10,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./NavBar.module.css";
 import { Button } from "react-bootstrap";
 import { ADMIN_ROUTE, LOGIN_ROUTE } from "../../utils/constants";
-import { setIsAuth } from "../../redux/slices/userSlice";
+import { setIsAuth, setUser } from "../../redux/slices/userSlice";
 
 export const NavBar = () => {
    const { _isAuth, user } = useAppSelector((state) => state.user);
@@ -19,6 +19,8 @@ export const NavBar = () => {
 
    const onExit = () => {
       dispatch(setIsAuth(false));
+      dispatch(setUser({}));
+      window.localStorage.removeItem('token');
       navigate(LOGIN_ROUTE);
    };
 

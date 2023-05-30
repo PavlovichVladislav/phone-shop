@@ -1,17 +1,34 @@
-import { BrowserRouter } from "react-router-dom";
 import { AppRouter } from "./components/AppRouter";
-import { Provider } from "react-redux";
-import { store } from "./redux/store";
+import { useEffect, useState } from "react";
+import { check } from "./http/userApi";
+import { useAppDispatch } from "./hooks/reduxHooks";
+import { setIsAuth, setUser } from "./redux/slices/userSlice";
+import { Spinner } from "react-bootstrap";
+import { BrowserRouter } from "react-router-dom";
 import { NavBar } from "./components/NavBar";
 
 function App() {
+   const [loading, setLoading] = useState(true);
+   const dispatch = useAppDispatch();
+
+   useEffect(() => {
+      check()
+         .then((user) => {
+            dispatch(setUser(user));
+            dispatch(setIsAuth(true));
+         })
+         .finally(() => setLoading(false))
+   }, []);
+
+   if (loading) {
+      return <Spinner animation="grow" />;
+   }
+
    return (
-      <Provider store={store}>
-         <BrowserRouter>
-            <NavBar />
-            <AppRouter />
-         </BrowserRouter>
-      </Provider>
+      <BrowserRouter>
+         <NavBar />
+         <AppRouter />
+      </BrowserRouter>
    );
 }
 

@@ -1,20 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { IUser } from "../../models/AppModels";
+import { TUser } from "../../models/AppModels";
 
 export interface UserState {
    _isAuth: boolean;
-   user: IUser;
+   user: TUser;
 }
 
 const initialState: UserState = {
    _isAuth: false,
-   user: {
-      id: 0,
-      email: "",
-      role: "",
-   },
+   user: {},
 };
 
 export const userSlice = createSlice({
@@ -24,8 +20,8 @@ export const userSlice = createSlice({
       setIsAuth: (state, action: PayloadAction<boolean>) => {
          state._isAuth = action.payload;
       },
-      setUser: (state, action: PayloadAction<IUser>) => {
-         state.user = action.payload
+      setUser: (state, action: PayloadAction<TUser>) => {
+         state.user = action.payload;
       },
    },
 });
