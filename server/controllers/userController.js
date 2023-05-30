@@ -47,7 +47,7 @@ class UserController {
       }
 
       const token = generateJwt(user.id, user.email, user.role);
-      
+
       return res.json({ token });
    }
 
