@@ -33,7 +33,7 @@ class UserController {
    }
 
    async login(req, res, next) {
-      console.log('login');
+      console.log("login");
       const { email, password } = req.body;
       const user = await User.findOne({ where: { email } });
 
@@ -47,12 +47,14 @@ class UserController {
       }
 
       const token = generateJwt(user.id, user.email, user.role);
+      
       return res.json({ token });
    }
 
    async check(req, res, next) {
+      const token = generateJwt(req.user.id, req.user.email, req.user.role);
 
-      res.json({message: 'working...'});
+      return res.json({ token });
    }
 }
 
