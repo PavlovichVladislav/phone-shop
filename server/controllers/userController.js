@@ -35,6 +35,11 @@ class UserController {
    async login(req, res, next) {
       console.log("login");
       const { email, password } = req.body;
+
+      if (!email || !password) {
+         return next(ApiError.badRequest("Необходимо указать email и пароль!"));
+      }
+ 
       const user = await User.findOne({ where: { email } });
 
       if (!user) {

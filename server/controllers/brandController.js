@@ -1,9 +1,15 @@
 const { Brand } = require("../models/models");
+const ApiError = require("../error/ApiError");
 
 class BrandController {
-    async create (req, res) {
-        const {name} = req.body;
-        const brand = await Brand.create({name});
+    async create (req, res, next) {
+        const {name, query} = req.body;
+
+        if (!name || !query) {
+            return next(ApiError.badRequest("Необходимо указать все данные"));
+         }
+
+        const brand = await Brand.create({name, query});
         return res.json(brand);
     }
 

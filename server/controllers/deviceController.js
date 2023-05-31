@@ -37,25 +37,25 @@ class DeviceController {
       page = page || 1;
       limit = limit || 9;
       let offset = page * limit - limit;
-      let devices;
+      let result;
 
       if (!brandId && !typeId) {
-         devices = await Device.findAndCountAll({ limit, offset });
+         result = await Device.findAndCountAll({ limit, offset });
       }
 
       if (brandId && !typeId) {
-         devices = await Device.findAndCountAll({ where: { brandId }, limit, offset });
+         result = await Device.findAndCountAll({ where: { brandId }, limit, offset });
       }
 
       if (!brandId && typeId) {
-         devices = await Device.findAndCountAll({ where: { typeId }, limit, offset });
+         result = await Device.findAndCountAll({ where: { typeId }, limit, offset });
       }
 
       if (brandId && typeId) {
-         devices = await Device.findAndCountAll({ where: { typeId, brandId }, limit, offset });
+         result = await Device.findAndCountAll({ where: { typeId, brandId }, limit, offset });
       }
 
-      return res.json(devices);
+      return res.json({count: result.count, devices: result.rows});
    }
 
    async getOne(req, res) {
