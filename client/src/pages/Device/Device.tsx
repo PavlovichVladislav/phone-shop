@@ -1,17 +1,21 @@
-import React from "react";
-import { Button, Card, Col, Container, Image, ListGroup, Row } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Card, Col, Container, Image, ListGroup, Row, Spinner } from "react-bootstrap";
 
 import styles from "./Device.module.css";
 import clsx from "clsx";
+import { IDevice } from "../../models/AppModels";
+import { fetchOneDevice } from "../../http/deviceApi";
+import { useParams } from "react-router-dom";
 
 export const Device = () => {
-   const device = {
-      id: 1,
-      name: 'Apple iPhone 14 Plus SIM 256 ГБ "тёмная ночь"',
-      price: 99960,
-      img: "https://static.re-store.ru/upload/resize_cache/iblock/24f/560_280_140cd750bba9870f18aada2478b24840a/24f5d50a9566b7ce082e806f73aca7a2.jpeg",
-      rating: 5,
-   };
+   const [device, setDevice] = useState<IDevice | null>(null);
+   const { id } = useParams();
+
+   useEffect(() => {
+      if (id) {
+         fetchOneDevice(+id).then(device => setDevice(device));
+      }
+   }, [])
 
    const description = [
       { id: 1, title: "Оперативная память", description: "6 гб" },
@@ -19,12 +23,14 @@ export const Device = () => {
       { id: 3, title: "Аккумулятор", description: "4000" },
    ];
 
+   if (!device) return <Spinner/>
+
    return (
       <div>
          <Container className="mt-5">
             <Row>
                <Col md={4}>
-                  <Image width={300} height={300} src={device.img} />
+                  <Image width={300} height={300} src={process.env.REACT_APP_API_URL + device.img} />
                </Col>
                <Col md={4}>
                   <Row className="d-flex flex-column align-items-center">

@@ -27,7 +27,8 @@ export const login = async (logEmail: string, password: string): Promise<IUser> 
 };
 
 export const check = async (): Promise<IUser> => {
-   const { data } = await $host.get<authResponse>("api/user/auth");
+   const { data } = await $authHost.get<authResponse>("api/user/auth");
+   localStorage.setItem("token", data.token);
    const { id, email, role } = jwtDecode<IUser>(data.token);
 
    return { id, email, role };

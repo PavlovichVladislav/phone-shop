@@ -17,7 +17,7 @@ export const DeviceCard: React.FC<Props> = ({ device }) => {
    return (
       <Card className={clsx("mt-3", styles.card)}>
          <Link to={`/device/${id}`}>
-            <Card.Img variant="top" src={img} className={styles.image} />
+            <Card.Img variant="top" src={process.env.REACT_APP_API_URL + img} className={styles.image} />
          </Link>
          <Card.Body>
             <Card.Title>{name}</Card.Title>

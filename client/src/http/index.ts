@@ -14,6 +14,6 @@ const authInterceptor = (config: InternalAxiosRequestConfig) => {
    return config;
 };
 
-$host.interceptors.request.use(authInterceptor);
+$authHost.interceptors.request.use(authInterceptor);
 
 export { $host, $authHost };
