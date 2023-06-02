@@ -4,12 +4,13 @@ import { Button, Modal } from "react-bootstrap";
 
 interface Props {
    onClose: () => void;
+   onSubmit?: (...args: any[]) => void;
    children: React.ReactNode;
    isShow: boolean;
    title: string;
 }
 
-export const ModalWrapper: React.FC<Props> = ({ onClose, children, isShow, title }) => {
+export const ModalWrapper: React.FC<Props> = ({ onClose, children, isShow, title, onSubmit }) => {
    return (
       <Modal
          show={isShow}
@@ -24,8 +25,15 @@ export const ModalWrapper: React.FC<Props> = ({ onClose, children, isShow, title
          </Modal.Header>
          <Modal.Body>{children}</Modal.Body>
          <Modal.Footer>
-            <Button onClick={onClose} variant="warning">Закрыть</Button>
-            <Button onClick={onClose} variant="warning">Добавить</Button>
+            <Button onClick={onClose} variant="warning">
+               Закрыть
+            </Button>
+            <Button
+               onClick={onSubmit}
+               variant="warning"
+            >
+               Добавить
+            </Button>
          </Modal.Footer>
       </Modal>
    );

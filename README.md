@@ -7,6 +7,7 @@ stack:
   - Axios
   - React router dom
   - React Bootstrap
+  - uuid, clsx, jwtDecode
 - Back
   - node
   - express

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { ModalWrapper } from "../ModalWrapper";
 import { Form } from "react-bootstrap";
+import { createBrand } from "../../../http/deviceApi";
 
 interface Props {
    onClose: () => void;
@@ -9,10 +10,33 @@ interface Props {
 }
 
 export const CreateBrand: React.FC<Props> = ({ isShow, onClose }) => {
+   const [brandName, setBrandName] = useState("");
+   const [queryName, setQueryName] = useState("");
+
+   const addBrand = () => {
+      createBrand(brandName, queryName)
+         .then(() => {
+            setBrandName("");
+            setQueryName("");
+            onClose();
+         })
+         .catch(() => setBrandName("ошибка"));
+   };
+
    return (
-      <ModalWrapper isShow={isShow} onClose={onClose} title="Добавление брэнда">
+      <ModalWrapper isShow={isShow} onClose={onClose} title="Добавление брэнда" onSubmit={addBrand}>
          <Form>
-            <Form.Control placeholder="Введите название брэнда" />
+            <Form.Control
+               placeholder="Введите название брэнда"
+               value={brandName}
+               onChange={(e) => setBrandName(e.target.value)}
+            />
+            <Form.Control
+               className="mt-3"
+               placeholder="Введите название query параметра"
+               value={queryName}
+               onChange={(e) => setQueryName(e.target.value)}
+            />
          </Form>
       </ModalWrapper>
    );
