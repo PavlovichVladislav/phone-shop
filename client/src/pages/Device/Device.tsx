@@ -17,12 +17,6 @@ export const Device = () => {
       }
    }, [])
 
-   const description = [
-      { id: 1, title: "Оперативная память", description: "6 гб" },
-      { id: 2, title: "Процессор", description: "a15 bionic" },
-      { id: 3, title: "Аккумулятор", description: "4000" },
-   ];
-
    if (!device) return <Spinner/>
 
    return (
@@ -60,7 +54,7 @@ export const Device = () => {
             <Row className="d-flex flex-column m-3">
                <ListGroup>
                   <h1>Характеристики</h1>
-                  {description.map((info) => (
+                  {device.info.map((info) => (
                      <ListGroup.Item key={info.id}>
                         {info.title}: {info.description}
                      </ListGroup.Item>

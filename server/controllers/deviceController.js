@@ -8,19 +8,19 @@ class DeviceController {
       let device = null;
 
       try {
-         const { name, price, brandId, typeId, info } = req.body;
+         let { name, price, brandId, typeId, info } = req.body;
          const { img } = req.files;
          let fileName = uuid.v4() + ".jpg";
          img.mv(path.resolve(__dirname, "..", "static", fileName));
 
          device = await Device.create({ name, price, brandId, typeId, img: fileName });
-
+         
          if (info) {
             info = JSON.parse(info);
-            info.forEach((i) =>
+            info.forEach((feature) =>
                DeviceInfo.create({
-                  title: i.title,
-                  description: i.description,
+                  title: feature.title,
+                  description: feature.description,
                   deviceId: device.id,
                })
             );

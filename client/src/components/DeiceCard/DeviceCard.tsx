@@ -20,7 +20,7 @@ export const DeviceCard: React.FC<Props> = ({ device }) => {
             <Card.Img variant="top" src={process.env.REACT_APP_API_URL + img} className={styles.image} />
          </Link>
          <Card.Body>
-            <Card.Title>{name}</Card.Title>
+            <Card.Title style={{height: 48}}>{name}</Card.Title>
             <div className={clsx("mt-2", styles.info)}>
                <Card.Subtitle className={clsx("text-black-50")}>{price} ₽</Card.Subtitle>
                <div className="rate">

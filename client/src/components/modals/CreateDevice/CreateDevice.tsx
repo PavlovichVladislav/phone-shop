@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { ModalWrapper } from "../ModalWrapper";
 import { Button, Col, Dropdown, Form, Row } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
-import { IBrand, IType } from "../../../models/AppModels";
+import { IBrand, IFeature, IType } from "../../../models/AppModels";
 import { createDevice, fetchBrands, fetchTypes } from "../../../http/deviceApi";
 import { setBrands, setTypes } from "../../../redux/slices/deviceSlice";
 
@@ -13,20 +13,16 @@ interface Props {
    isShow: boolean;
 }
 
-interface Feature {
-   id: string;
-   title: string;
-   description: string;
-}
+
 
 export const CreateDevice: React.FC<Props> = ({ isShow, onClose }) => {
    const { types, brands } = useAppSelector((state) => state.device);
-   const [features, setFeatures] = useState<Feature[]>([]);
+   const [features, setFeatures] = useState<IFeature[]>([]);
    const [name, setName] = useState("");
    const [price, setPrice] = useState("");
    const [type, setType] = useState<IType>();
    const [brand, setBrand] = useState<IBrand>();
-   const [img, setImg] = useState();
+   const [img, setImg] = useState<any>();
    const dispatch = useAppDispatch();
 
    useEffect(() => {
@@ -42,14 +38,28 @@ export const CreateDevice: React.FC<Props> = ({ isShow, onClose }) => {
       setFeatures(features.filter((feature) => feature.id !== id));
    };
 
-   const changeInfo = (key: "title" | "description", value: string, id: string) => {
+   const changeFeature = (key: "title" | "description", value: string, id: string) => {
       setFeatures(
          features.map((feature) => (feature.id === id ? { ...feature, [key]: value } : feature))
       );
    };
 
    const addDevice = () => {
-      console.log(features);
+      if (!brand || !type) {
+         alert("Необходимо выбрать брэнд и тип");
+         return;
+      }
+
+
+
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("price", price);
+      formData.append("img", img);
+      formData.append("brandId", `${brand.id}`);
+      formData.append("typeId", `${type.id}`);
+      formData.append('info', JSON.stringify(features));
+      createDevice(formData).then(data => onClose());
    };
 
    return (
@@ -99,8 +109,9 @@ export const CreateDevice: React.FC<Props> = ({ isShow, onClose }) => {
             <Form.Control
                type="file"
                className="mt-3"
-               value={img}
-               // onChange={(e) => setImg(e.target.value)}
+               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setImg(e.target.files ? e.target.files[0] : "");
+               }}
             />
             <hr />
             <Button variant="success" onClick={addFeature}>
@@ -111,19 +122,19 @@ export const CreateDevice: React.FC<Props> = ({ isShow, onClose }) => {
                   <Col md={4}>
                      <Form.Control
                         placeholder="Введите название характеристики"
-                        onChange={(e) => changeInfo("title", e.target.value, feature.id)}
+                        onChange={(e) => changeFeature("title", e.target.value, feature.id)}
                         value={feature.title}
                      />
                   </Col>
                   <Col md={4}>
                      <Form.Control
                         placeholder="Введите описание характеристики"
-                        onChange={(e) => changeInfo("description", e.target.value, feature.id)}
+                        onChange={(e) => changeFeature("description", e.target.value, feature.id)}
                         value={feature.description}
                      />
                   </Col>
                   <Col md={4}>
-                     <Button variant="danger" onClick={() => removeFeature(feature.id)} >
+                     <Button variant="danger" onClick={() => removeFeature(feature.id)}>
                         Удалить характеристику
                      </Button>
                   </Col>

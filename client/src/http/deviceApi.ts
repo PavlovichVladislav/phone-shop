@@ -33,8 +33,8 @@ export const fetchBrands = async (): Promise<IBrand[]> => {
    return data;
 };
 
-export const createDevice = async ({ img, name, price }: IDevice): Promise<IDevice> => {
-   const { data } = await $authHost.post<IDevice>("api/brand", { img, name, price });
+export const createDevice = async (formData: FormData): Promise<IDevice> => {
+   const { data } = await $authHost.post<IDevice>("api/device", formData);
 
    return {
       id: data.id,
@@ -42,6 +42,7 @@ export const createDevice = async ({ img, name, price }: IDevice): Promise<IDevi
       price: data.price,
       img: data.img,
       rating: data.rating,
+      info: data.info
    };
 };
 
