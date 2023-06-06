@@ -42,17 +42,24 @@ export const createDevice = async (formData: FormData): Promise<IDevice> => {
       price: data.price,
       img: data.img,
       rating: data.rating,
-      info: data.info
+      info: data.info,
    };
 };
 
 export interface fetchDevicesRes {
-    count: number;
-    devices: IDevice[],
+   count: number;
+   devices: IDevice[];
 }
 
-export const fetchDevices = async (): Promise<fetchDevicesRes> => {
-   const { data } = await $host.get<fetchDevicesRes>("api/device");
+export const fetchDevices = async (
+   brandId: number | null,
+   typeId: number | null,
+   limit: number | null,
+   page: number | null
+): Promise<fetchDevicesRes> => {
+   const { data } = await $host.get<fetchDevicesRes>("api/device", {
+      params: { brandId, typeId, limit, page },
+   });
 
    return data;
 };

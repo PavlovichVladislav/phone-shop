@@ -7,7 +7,8 @@ import { Card, Form } from "react-bootstrap";
 
 import styles from "./Brand.module.css";
 import { fetchBrands } from "../../http/deviceApi";
-import { setBrands } from "../../redux/slices/deviceSlice";
+import { setBrand, setBrands } from "../../redux/slices/deviceSlice";
+import { IBrand } from "../../models/AppModels";
 
 export const BrandBar = () => {
    const { brands } = useAppSelector((store) => store.device);
@@ -17,9 +18,11 @@ export const BrandBar = () => {
 
    const currentBrand = searchParams.get("brand");
 
-   const onChooseBrand = (value: string) => {
-      searchParams.set("brand", value);
+   const onChooseBrand = (brand: IBrand) => {
+      searchParams.set("brand", brand.query);
+      searchParams.set("page", "1");
       setSearchParams(searchParams);
+      dispatch(setBrand(brand.id));
    };
 
    useEffect(() => {
@@ -32,7 +35,7 @@ export const BrandBar = () => {
             <Card
                key={brand.id}
                className={clsx("p-2", styles.card)}
-               onClick={() => onChooseBrand(brand.query)}
+               onClick={() => onChooseBrand(brand)}
                bg={currentBrand === brand.query ? "primary" : ""}
                text={currentBrand === brand.query ? "light" : undefined}
             >

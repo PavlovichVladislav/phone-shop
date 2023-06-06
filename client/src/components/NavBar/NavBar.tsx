@@ -11,6 +11,7 @@ import styles from "./NavBar.module.css";
 import { Button } from "react-bootstrap";
 import { ADMIN_ROUTE, LOGIN_ROUTE } from "../../utils/constants";
 import { setIsAuth, setUser } from "../../redux/slices/userSlice";
+import { setBrand, setType } from "../../redux/slices/deviceSlice";
 
 export const NavBar = () => {
    const { _isAuth, user } = useAppSelector((state) => state.user);
@@ -24,13 +25,19 @@ export const NavBar = () => {
       navigate(LOGIN_ROUTE);
    };
 
+   const onBackToMain = () => {
+      dispatch(setBrand(null));
+      dispatch(setType(null));
+      navigate('/');
+   }
+
    return (
       <>
          <Navbar bg="dark" variant="dark">
             <Container>
-               <NavLink className={styles.navLink} to={"/"}>
+               <div className={styles.navLink} onClick={onBackToMain}>
                   SibDevice
-               </NavLink>
+               </div>
                <Nav className="ml-auto">
                   {_isAuth ? (
                      <>

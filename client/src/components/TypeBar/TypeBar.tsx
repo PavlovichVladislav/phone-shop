@@ -3,7 +3,8 @@ import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { ListGroup } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import { fetchTypes } from "../../http/deviceApi";
-import { setTypes } from "../../redux/slices/deviceSlice";
+import { setType, setTypes } from "../../redux/slices/deviceSlice";
+import { IType } from "../../models/AppModels";
 
 export const TypeBar = () => {
    const { types } = useAppSelector((store) => store.device);
@@ -13,9 +14,11 @@ export const TypeBar = () => {
 
    const currentType = searchParams.get("type");
 
-   const onChooseType = (value: string) => {
-      searchParams.set("type", value);
+   const onChooseType = (type: IType) => {
+      searchParams.set("type", type.query);
+      searchParams.set("page", "1");
       setSearchParams(searchParams);
+      dispatch(setType(type.id));
    };
 
    useEffect(() => {
@@ -29,7 +32,7 @@ export const TypeBar = () => {
                key={type.id}
                active={currentType === type.query}
                action
-               onClick={() => onChooseType(type.query)}
+               onClick={() => onChooseType(type)}
                //    variant="light"
             >
                {type.name}
