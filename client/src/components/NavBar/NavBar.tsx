@@ -20,7 +20,7 @@ export const NavBar = () => {
 
    const onExit = () => {
       dispatch(setIsAuth(false));
-      dispatch(setUser({}));
+      dispatch(setUser(null));
       window.localStorage.removeItem('token');
       navigate(LOGIN_ROUTE);
    };

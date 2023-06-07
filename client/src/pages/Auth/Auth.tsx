@@ -28,7 +28,7 @@ export const Auth = () => {
 
    const handleBtnClick = async () => {
       try {
-         let user: TUser = {};
+         let user: TUser = null;
 
          if (isLogin) {
             user = await login(email, password);

@@ -3,22 +3,41 @@ import { ModalWrapper } from "../ModalWrapper";
 import { Button, ButtonGroup, ButtonToolbar, Form, Row } from "react-bootstrap";
 
 import styles from "./CreateReview.module.css";
+import { createReview } from "../../../http/reviewApi";
+import { useAppSelector } from "../../../hooks/reduxHooks";
 
 interface Props {
    onClose: () => void;
    isShow: boolean;
+   deviceId: number;
 }
 
 const rates = [1, 2, 3, 4, 5];
 
-export const CreateReview: React.FC<Props> = ({ isShow, onClose }) => {
+export const CreateReview: React.FC<Props> = ({ isShow, onClose, deviceId }) => {
    const [feedBack, setFeedback] = useState("");
    const [selectedRate, setSelectedRate] = useState(0);
+   const { user } = useAppSelector((state) => state.user);
 
    const sendReview = () => {
       if (!selectedRate) {
          alert("Пожалуйста, укажите рейтинг");
+         return;
       }
+
+      if (!user) {
+         alert("Не удалось получить информацию о пользователе, попробуйте перезайти");
+         return;
+      }
+
+      createReview(selectedRate, user.id, deviceId)
+         .then(() => {
+            setFeedback("");
+            setSelectedRate(0);
+            alert('Спасибо за ваш отзыв!');
+            onClose();
+         })
+         .catch(() => alert("ошибка"));
    };
 
    return (

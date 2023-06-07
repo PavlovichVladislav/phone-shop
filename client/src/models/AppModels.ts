@@ -4,7 +4,7 @@ export interface IUser {
     role: string;
 }
 
-export type TUser = IUser | {};
+export type TUser = IUser | null;
 
 export interface IType {
     id: number;

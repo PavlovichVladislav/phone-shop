@@ -30,7 +30,7 @@ export const BrandBar = () => {
    }, []);
 
    return (
-      <Form className="d-flex flex-wrap gap-2">
+      <Form className="d-flex flex-wrap gap-2 ps-3">
          {brands.map((brand) => (
             <Card
                key={brand.id}

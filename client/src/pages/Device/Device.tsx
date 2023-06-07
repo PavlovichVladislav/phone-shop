@@ -17,7 +17,7 @@ export const Device = () => {
       if (id) {
          fetchOneDevice(+id).then((device) => setDevice(device));
       }
-   }, []);
+   }, [reviewVisible]);
 
    if (!device) return <Spinner />;
 
@@ -65,7 +65,11 @@ export const Device = () => {
                ))}
             </ListGroup>
          </Row>
-         <CreateReview isShow={reviewVisible} onClose={() => setReviewVisible(false)} />
+         <CreateReview
+            isShow={reviewVisible}
+            onClose={() => setReviewVisible(false)}
+            deviceId={device.id}
+         />
       </Container>
    );
 };
