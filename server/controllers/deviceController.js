@@ -14,7 +14,7 @@ class DeviceController {
          img.mv(path.resolve(__dirname, "..", "static", fileName));
 
          device = await Device.create({ name, price, brandId, typeId, img: fileName });
-         
+
          if (info) {
             info = JSON.parse(info);
             info.forEach((feature) =>
@@ -40,22 +40,37 @@ class DeviceController {
       let result;
 
       if (!brandId && !typeId) {
-         result = await Device.findAndCountAll({ limit, offset });
+         result = await Device.findAndCountAll({ limit, offset, order: [["createdAt", "ASC"]] });
       }
 
       if (brandId && !typeId) {
-         result = await Device.findAndCountAll({ where: { brandId }, limit, offset });
+         result = await Device.findAndCountAll({
+            where: { brandId },
+            limit,
+            offset,
+            order: [["createdAt", "ASC"]],
+         });
       }
 
       if (!brandId && typeId) {
-         result = await Device.findAndCountAll({ where: { typeId }, limit, offset });
+         result = await Device.findAndCountAll({
+            where: { typeId },
+            limit,
+            offset,
+            order: [["createdAt", "ASC"]],
+         });
       }
 
       if (brandId && typeId) {
-         result = await Device.findAndCountAll({ where: { typeId, brandId }, limit, offset });
+         result = await Device.findAndCountAll({
+            where: { typeId, brandId },
+            limit,
+            offset,
+            order: [["createdAt", "ASC"]],
+         });
       }
 
-      return res.json({count: result.count, devices: result.rows});
+      return res.json({ count: result.count, devices: result.rows });
    }
 
    async getOne(req, res) {

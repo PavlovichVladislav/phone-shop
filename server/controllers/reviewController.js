@@ -21,16 +21,9 @@ class ReviewController {
 
         const reviews = await Rating.findAndCountAll({where: {deviceId}})
 
-
-
         const newRating = (device.rating * reviews.count + +rate) / (+reviews.count + 1);
-
-        console.log(device.rating);
-        console.log(reviews.count);
-        console.log(rate);
-        console.log(newRating);
-
         device.rating = newRating.toFixed(2);
+        
         await device.save();
 
         const rating = await Rating.create({rate, userId, deviceId});
