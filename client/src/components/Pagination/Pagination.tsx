@@ -11,7 +11,7 @@ export const Paging: React.FC<Props> = ({ count, itemsInPage }) => {
    const pages = Math.ceil(count / itemsInPage);
    const [searchParams, setSearchParams] = useSearchParams();
 
-    const curPage = searchParams.get('page') || 1;
+   const curPage = searchParams.get("page") || 1;
 
    const onPageClick = (page: string) => {
       setSearchParams((params) => {
@@ -28,7 +28,13 @@ export const Paging: React.FC<Props> = ({ count, itemsInPage }) => {
          {Array(pages)
             .fill(null)
             .map((_, i) => (
-               <Pagination.Item key={i} active={i+1 === +curPage} onClick={() => onPageClick(`${i+1}`)}>{i + 1}</Pagination.Item>
+               <Pagination.Item
+                  key={i}
+                  active={i + 1 === +curPage}
+                  onClick={() => onPageClick(`${i + 1}`)}
+               >
+                  {i + 1}
+               </Pagination.Item>
             ))}
          <Pagination.Last />
       </Pagination>

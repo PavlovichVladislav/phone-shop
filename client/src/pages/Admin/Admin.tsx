@@ -13,50 +13,48 @@ export const Admin = () => {
    const [deviceVisible, setDeviceVisible] = useState(false);
 
    return (
-      <div>
-         <Container className="d-flex flex-column align-items-center mt-4">
-            <Row className={styles.wrapper}>
-               <Button variant="warning" className="mt-2" onClick={() => setBrandVisible(true)}>
-                  Добавить бренд
-               </Button>
-               <Button
-                  variant="warning"
-                  className="mt-2"
-                  onClick={() => {
-                     setTypeVisible(true);
-                  }}
-               >
-                  Добавить тип
-               </Button>
-               <Button
-                  variant="warning"
-                  className="mt-2"
-                  onClick={() => {
-                     setDeviceVisible(true);
-                  }}
-               >
-                  Добавить устройство
-               </Button>
-            </Row>
-            <CreateBrand
-               isShow={brandVisible}
-               onClose={() => {
-                  setBrandVisible(false);
+      <Container className="d-flex flex-column align-items-center mt-4">
+         <Row className={styles.wrapper}>
+            <Button variant="warning" className="mt-2" onClick={() => setBrandVisible(true)}>
+               Добавить бренд
+            </Button>
+            <Button
+               variant="warning"
+               className="mt-2"
+               onClick={() => {
+                  setTypeVisible(true);
                }}
-            />
-            <CreateType
-               isShow={typeVisible}
-               onClose={() => {
-                  setTypeVisible(false);
+            >
+               Добавить тип
+            </Button>
+            <Button
+               variant="warning"
+               className="mt-2"
+               onClick={() => {
+                  setDeviceVisible(true);
                }}
-            />
-            <CreateDevice
-               isShow={deviceVisible}
-               onClose={() => {
-                  setDeviceVisible(false);
-               }}
-            />
-         </Container>
-      </div>
+            >
+               Добавить устройство
+            </Button>
+         </Row>
+         <CreateBrand
+            isShow={brandVisible}
+            onClose={() => {
+               setBrandVisible(false);
+            }}
+         />
+         <CreateType
+            isShow={typeVisible}
+            onClose={() => {
+               setTypeVisible(false);
+            }}
+         />
+         <CreateDevice
+            isShow={deviceVisible}
+            onClose={() => {
+               setDeviceVisible(false);
+            }}
+         />
+      </Container>
    );
 };

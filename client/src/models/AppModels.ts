@@ -32,3 +32,10 @@ export interface IDevice {
     img: string;
     info: IFeature[];
 }
+
+export interface IRate {
+    id: number;
+    rate: number;
+    userId: number;
+    deviceId: number;
+}
