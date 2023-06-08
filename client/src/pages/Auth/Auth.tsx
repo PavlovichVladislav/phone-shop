@@ -53,7 +53,6 @@ export const Auth = () => {
    };
 
    return (
-      <div>
          <Container
             className={clsx("d-flex justify-content-center align-items-center", styles.auth)}
          >
@@ -91,6 +90,5 @@ export const Auth = () => {
                </Form>
             </Card>
          </Container>
-      </div>
    );
 };
