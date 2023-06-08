@@ -3,22 +3,22 @@ import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { useSearchParams } from "react-router-dom";
 import clsx from "clsx";
 
-import { Card, Form } from "react-bootstrap";
-
-import styles from "./Brand.module.css";
 import { fetchBrands } from "../../http/deviceApi";
 import { setBrand, setBrands } from "../../redux/slices/deviceSlice";
-import { IBrand } from "../../models/AppModels";
+
+import { Card, Form } from "react-bootstrap";
+
+import { ICategory } from "../../models/AppModels";
+
+import styles from "./Brand.module.css";
 
 export const BrandBar = () => {
    const { brands } = useAppSelector((store) => store.device);
    const [searchParams, setSearchParams] = useSearchParams();
-
    const dispatch = useAppDispatch();
-
    const currentBrand = searchParams.get("brand");
 
-   const onChooseBrand = (brand: IBrand) => {
+   const onChooseBrand = (brand: ICategory) => {
       searchParams.set("brand", brand.query);
       searchParams.set("page", "1");
       setSearchParams(searchParams);

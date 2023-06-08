@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { IBrand, IDevice, IType } from "../../models/AppModels";
+import { ICategory, IDevice } from "../../models/AppModels";
 
 export interface DeviceState {
-   types: IType[];
-   brands: IBrand[];
+   types: ICategory[];
+   brands: ICategory[];
    devices: IDevice[];
    count: number;
    curBrandId: number | null;
@@ -25,10 +25,10 @@ export const deviceSlice = createSlice({
    name: "device",
    initialState,
    reducers: {
-      setTypes: (state, action: PayloadAction<IType[]>) => {
+      setTypes: (state, action: PayloadAction<ICategory[]>) => {
          state.types = action.payload;
       },
-      setBrands: (state, action: PayloadAction<IBrand[]>) => {
+      setBrands: (state, action: PayloadAction<ICategory[]>) => {
          state.brands = action.payload;
       },
       setDeives: (state, action: PayloadAction<IDevice[]>) => {

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { Form } from "react-bootstrap";
+
+import { createBrand } from "../../../http/deviceApi";
 
 import { ModalWrapper } from "../ModalWrapper";
-import { Form } from "react-bootstrap";
-import { createBrand } from "../../../http/deviceApi";
 
 interface Props {
    onClose: () => void;
@@ -20,7 +21,7 @@ export const CreateBrand: React.FC<Props> = ({ isShow, onClose }) => {
             setQueryName("");
             onClose();
          })
-         .catch(() => setBrandName("ошибка"));
+         .catch(() => alert('Ошибка'));
    };
 
    return (

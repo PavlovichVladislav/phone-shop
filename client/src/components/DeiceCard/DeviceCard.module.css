@@ -11,6 +11,10 @@
     cursor: pointer;
 }
 
+.title {
+    height: 48px;
+}
+
 .rating {
     margin-right: 4px;
 }

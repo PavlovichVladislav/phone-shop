@@ -6,13 +6,7 @@ export interface IUser {
 
 export type TUser = IUser | null;
 
-export interface IType {
-    id: number;
-    name: string;
-    query: string;
-}
-
-export interface IBrand {
+export interface ICategory {
     id: number;
     name: string;
     query: string;

@@ -1,11 +1,12 @@
 import React from "react";
 import { Button, Card, Image } from "react-bootstrap";
-import { IDevice } from "../../models/AppModels";
+import { Link } from "react-router-dom";
 import clsx from "clsx";
+
+import { IDevice } from "../../models/AppModels";
 
 import styles from "./DeviceCard.module.css";
 import star from "../../assets/star.png";
-import { Link } from "react-router-dom";
 
 interface Props {
    device: IDevice;
@@ -17,10 +18,14 @@ export const DeviceCard: React.FC<Props> = ({ device }) => {
    return (
       <Card className={clsx("mt-3", styles.card)}>
          <Link to={`/device/${id}`}>
-            <Card.Img variant="top" src={process.env.REACT_APP_API_URL + img} className={styles.image} />
+            <Card.Img
+               variant="top"
+               src={process.env.REACT_APP_API_URL + img}
+               className={styles.image}
+            />
          </Link>
          <Card.Body>
-            <Card.Title style={{height: 48}}>{name}</Card.Title>
+            <Card.Title className={styles.title}>{name}</Card.Title>
             <div className={clsx("mt-2", styles.info)}>
                <Card.Subtitle className={clsx("text-black-50")}>{price} ₽</Card.Subtitle>
                <div className="rate">
