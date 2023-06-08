@@ -3,19 +3,22 @@ import { Button, Card, Col, Container, Image, ListGroup, Row, Spinner } from "re
 
 import styles from "./Device.module.css";
 import clsx from "clsx";
-import { IDevice } from "../../models/AppModels";
+import { IComment, IDevice } from "../../models/AppModels";
 import { fetchOneDevice } from "../../http/deviceApi";
 import { useParams } from "react-router-dom";
 import { CreateReview } from "../../components/modals/CreateReview";
+import { fetchComments } from "../../http/reviewApi";
 
 export const Device = () => {
    const [device, setDevice] = useState<IDevice | null>(null);
    const [reviewVisible, setReviewVisible] = useState(false);
+   const [comments, setComments] = useState<IComment[]>([]);
    const { id } = useParams();
 
    useEffect(() => {
       if (id) {
          fetchOneDevice(+id).then((device) => setDevice(device));
+         fetchComments(+id).then((comments) => setComments(comments));
       }
    }, [reviewVisible]);
 
@@ -61,6 +64,16 @@ export const Device = () => {
                {device.info.map((info) => (
                   <ListGroup.Item key={info.id}>
                      {info.title}: {info.description}
+                  </ListGroup.Item>
+               ))}
+            </ListGroup>
+         </Row>
+         <Row className="d-flex flex-column m-3">
+            <ListGroup>
+               <h1>Комментарии</h1>
+               {comments.map((comment) => (
+                  <ListGroup.Item key={comment.id}>
+                     Пользователь {comment.userId}: {comment.comment}
                   </ListGroup.Item>
                ))}
             </ListGroup>

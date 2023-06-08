@@ -34,3 +34,11 @@ export const createComment = async (
       userId: data.userId,
    };
 };
+
+export const fetchComments = async (deviceId: number): Promise<IComment[]> => {
+   const { data } = await $authHost.get<{ comments: IComment[]; count: number }>(
+      `api/review/comment/${deviceId}`
+   );
+
+   return data.comments;
+};
