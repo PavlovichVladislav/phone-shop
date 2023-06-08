@@ -6,5 +6,6 @@ const router = new Router();
 
 router.post("/rate", ReviewController.createRate);
 router.post("/comment", ReviewController.createComment);
+router.get("/comment/:deviceId", ReviewController.getComments);
 
 module.exports = router;
