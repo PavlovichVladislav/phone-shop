@@ -32,45 +32,50 @@ class DeviceController {
       }
    }
 
-   async getAll(req, res) {
-      let { brandId, typeId, limit, page } = req.query;
-      page = page || 1;
-      limit = limit || 9;
-      let offset = page * limit - limit;
-      let result;
+   async getAll(req, res, next) {
+      try {
+         let { brandId, typeId, limit, page } = req.query;
 
-      if (!brandId && !typeId) {
-         result = await Device.findAndCountAll({ limit, offset, order: [["createdAt", "ASC"]] });
+         page = page || 1;
+         limit = limit || 9;
+         let offset = page * limit - limit;
+         let result;
+
+         if (!brandId && !typeId) {
+            result = await Device.findAndCountAll({ limit, offset, order: [["createdAt", "ASC"]] });
+         }
+
+         if (brandId && !typeId) {
+            result = await Device.findAndCountAll({
+               where: { brandId },
+               limit,
+               offset,
+               order: [["createdAt", "ASC"]],
+            });
+         }
+
+         if (!brandId && typeId) {
+            result = await Device.findAndCountAll({
+               where: { typeId },
+               limit,
+               offset,
+               order: [["createdAt", "ASC"]],
+            });
+         }
+
+         if (brandId && typeId) {
+            result = await Device.findAndCountAll({
+               where: { typeId, brandId },
+               limit,
+               offset,
+               order: [["createdAt", "ASC"]],
+            });
+         }
+
+         return res.json({ count: result.count, devices: result.rows });
+      } catch (e) {
+         next(ApiError.badRequest(e.message));
       }
-
-      if (brandId && !typeId) {
-         result = await Device.findAndCountAll({
-            where: { brandId },
-            limit,
-            offset,
-            order: [["createdAt", "ASC"]],
-         });
-      }
-
-      if (!brandId && typeId) {
-         result = await Device.findAndCountAll({
-            where: { typeId },
-            limit,
-            offset,
-            order: [["createdAt", "ASC"]],
-         });
-      }
-
-      if (brandId && typeId) {
-         result = await Device.findAndCountAll({
-            where: { typeId, brandId },
-            limit,
-            offset,
-            order: [["createdAt", "ASC"]],
-         });
-      }
-
-      return res.json({ count: result.count, devices: result.rows });
    }
 
    async getOne(req, res) {

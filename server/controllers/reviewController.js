@@ -1,8 +1,8 @@
-const { Rating, Device } = require('../models/models');
+const { Rating, Device, Comment } = require('../models/models');
 const ApiError = require ('../error/ApiError');
 
 class ReviewController {
-    async create (req, res, next) {
+    async createRate (req, res, next) {
         const {rate, userId, deviceId} = req.body;
 
         if (!rate || rate > 5 || rate < 1) {
@@ -31,10 +31,27 @@ class ReviewController {
         return res.json(rating);
     }
 
-    // async getAll (req, res) {
-    //     const types = await Type.findAll();
-    //     return res.json(types);
-    // }
+    async createComment (req, res, next) {
+        const {comment, userId, deviceId} = req.body;
+
+        if (!comment) {
+            return next(ApiError.badRequest("Не указан комментарий"));
+        }
+
+        if (!userId || !deviceId) {
+            return next(ApiError.badRequest("Необходимо указать id пользователя и устройства"));
+        }
+
+        const device = await Device.findOne({where: {id: deviceId}}); 
+        
+        if (!device) {
+            return next(ApiError.badRequest("Ошибка: устройство не было найдено"));
+        }
+
+        const newComment = await Comment.create({comment, userId, deviceId});
+
+        return res.json(newComment);
+    }
 }
 
 module.exports = new ReviewController();

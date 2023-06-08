@@ -4,8 +4,7 @@ const checkRole = require("../middleware/checkRolesMiddleware");
 
 const router = new Router();
 
-router.post("/", ReviewController.create);
-// router.get("/", ReviewController.getAll);
-// можно ещё delete
+router.post("/rate", ReviewController.createRate);
+router.post("/comment", ReviewController.createComment);
 
 module.exports = router;
