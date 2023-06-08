@@ -39,3 +39,10 @@ export interface IRate {
     userId: number;
     deviceId: number;
 }
+
+export interface IComment {
+    id: number;
+    comment: string;
+    userId: number;
+    deviceId: number;
+}

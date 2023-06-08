@@ -3,7 +3,7 @@ import { ModalWrapper } from "../ModalWrapper";
 import { Button, ButtonGroup, ButtonToolbar, Form, Row } from "react-bootstrap";
 
 import styles from "./CreateReview.module.css";
-import { createReview } from "../../../http/reviewApi";
+import { createComment, createReview } from "../../../http/reviewApi";
 import { useAppSelector } from "../../../hooks/reduxHooks";
 
 interface Props {
@@ -30,11 +30,15 @@ export const CreateReview: React.FC<Props> = ({ isShow, onClose, deviceId }) => 
          return;
       }
 
+      if (feedBack) {
+         createComment(feedBack, user.id, deviceId)
+      }
+
       createReview(selectedRate, user.id, deviceId)
          .then(() => {
             setFeedback("");
             setSelectedRate(0);
-            alert('Спасибо за ваш отзыв!');
+            alert("Спасибо за ваш отзыв!");
             onClose();
          })
          .catch(() => alert("ошибка"));
