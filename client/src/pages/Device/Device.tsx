@@ -7,20 +7,57 @@ import { IComment, IDevice } from "../../models/AppModels";
 import { fetchOneDevice } from "../../http/deviceApi";
 import { useParams } from "react-router-dom";
 import { CreateReview } from "../../components/modals/CreateReview";
-import { fetchComments } from "../../http/reviewApi";
+import { createReview, fetchComments } from "../../http/reviewApi";
+import { useAppSelector } from "../../hooks/reduxHooks";
+import { RateToolbar } from "../../components/RateToolbar";
+import { DeviceComments } from "../../components/DeviceComments";
+
+const rates = [1, 2, 3, 4, 5];
 
 export const Device = () => {
    const [device, setDevice] = useState<IDevice | null>(null);
    const [reviewVisible, setReviewVisible] = useState(false);
    const [comments, setComments] = useState<IComment[]>([]);
+   const { user } = useAppSelector((state) => state.user);
    const { id } = useParams();
+   const [rate, setRate] = useState<number | null>(null);
 
    useEffect(() => {
       if (id) {
          fetchOneDevice(+id).then((device) => setDevice(device));
          fetchComments(+id).then((comments) => setComments(comments));
       }
-   }, [reviewVisible]);
+   }, []);
+
+   const sendReview = (selectedRate: number) => {
+      if (!selectedRate) {
+         alert("Пожалуйста, укажите рейтинг");
+         return;
+      }
+
+      if (!device) {
+         alert("Произошла ошибка: устройство не найдено");
+         return;
+      }
+
+      if (!user) {
+         alert("Произошла ошибка: пользователь не найден");
+         return;
+      }
+
+      createReview(selectedRate, user.id, device.id)
+         .then(({ deviceRate }) => {
+            setRate(deviceRate);
+            alert("Спасибо за ваш отзыв!");
+         })
+         .catch(() => alert("ошибка"));
+   };
+
+   const loadComments = () => {
+      if (id) {
+         fetchComments(+id).then((comments) => setComments(comments));
+      }
+   };
 
    if (!device) return <Spinner />;
 
@@ -39,7 +76,7 @@ export const Device = () => {
                         styles.star
                      )}
                   >
-                     {device.rating}
+                     {rate || device.rating}
                   </div>
                </Row>
             </Col>
@@ -51,6 +88,7 @@ export const Device = () => {
                   )}
                >
                   <h3>Цена: {device.price} руб.</h3>
+                  <RateToolbar items={rates} onSelectItem={sendReview} />
                   <Button variant="warning">Добавить в корзину</Button>
                   <Button variant="warning" onClick={() => setReviewVisible(true)}>
                      Оставить отзыв
@@ -69,19 +107,13 @@ export const Device = () => {
             </ListGroup>
          </Row>
          <Row className="d-flex flex-column m-3">
-            <ListGroup>
-               <h1>Комментарии</h1>
-               {comments.map((comment) => (
-                  <ListGroup.Item key={comment.id}>
-                     Пользователь {comment.userId}: {comment.comment}
-                  </ListGroup.Item>
-               ))}
-            </ListGroup>
+            <DeviceComments comments={comments} />
          </Row>
          <CreateReview
             isShow={reviewVisible}
             onClose={() => setReviewVisible(false)}
             deviceId={device.id}
+            onSubmit={loadComments}
          />
       </Container>
    );

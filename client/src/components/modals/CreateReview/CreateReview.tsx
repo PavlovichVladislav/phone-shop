@@ -1,67 +1,55 @@
 import React, { useState } from "react";
 import { ModalWrapper } from "../ModalWrapper";
-import { Button, ButtonGroup, ButtonToolbar, Form, Row } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 
-import styles from "./CreateReview.module.css";
-import { createComment, createReview } from "../../../http/reviewApi";
+import { createComment } from "../../../http/reviewApi";
 import { useAppSelector } from "../../../hooks/reduxHooks";
 
 interface Props {
    onClose: () => void;
    isShow: boolean;
    deviceId: number;
+   onSubmit: () => void;
 }
 
-const rates = [1, 2, 3, 4, 5];
-
-export const CreateReview: React.FC<Props> = ({ isShow, onClose, deviceId }) => {
+export const CreateReview: React.FC<Props> = ({ isShow, onClose, deviceId, onSubmit }) => {
    const [feedBack, setFeedback] = useState("");
-   const [selectedRate, setSelectedRate] = useState(0);
+
    const { user } = useAppSelector((state) => state.user);
 
-   const sendReview = () => {
-      if (!selectedRate) {
-         alert("Пожалуйста, укажите рейтинг");
-         return;
-      }
-
+   const sendComment = () => {
       if (!user) {
          alert("Не удалось получить информацию о пользователе, попробуйте перезайти");
          return;
       }
 
-      if (feedBack) {
-         createComment(feedBack, user.id, deviceId)
+      if (!feedBack) {
+         alert("Необходимо что - то написать...");
+         return;
       }
 
-      createReview(selectedRate, user.id, deviceId)
+      createComment(feedBack, user.id, deviceId)
          .then(() => {
-            setFeedback("");
-            setSelectedRate(0);
-            alert("Спасибо за ваш отзыв!");
+            onSubmit();
             onClose();
          })
-         .catch(() => alert("ошибка"));
+         .catch(() => {
+            alert(() => {
+               'Произошла ошибка'
+            })
+         })
+         .finally(() => {
+            setFeedback("");
+         });
    };
 
    return (
-      <ModalWrapper isShow={isShow} onClose={onClose} title="Создание отзыва" onSubmit={sendReview}>
-         <Form className="d-flex flex-row">
-            <h3>Выберите рэйтинг устройства: </h3>
-            <ButtonToolbar aria-label="Toolbar with button groups" className={styles.toolbar}>
-               <ButtonGroup className="mr-2" aria-label="First group">
-                  {rates.map((rate) => {
-                     const variant = rate === selectedRate ? "warning" : "outline-warning";
-
-                     return (
-                        <Button key={rate} variant={variant} onClick={() => setSelectedRate(rate)}>
-                           {rate}
-                        </Button>
-                     );
-                  })}
-               </ButtonGroup>
-            </ButtonToolbar>
-         </Form>
+      <ModalWrapper
+         isShow={isShow}
+         onClose={onClose}
+         title="Создание отзыва"
+         onSubmit={sendComment}
+      >
          <Form>
             <Form.Control
                className="mt-3"
