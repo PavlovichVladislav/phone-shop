@@ -28,7 +28,7 @@ class ReviewController {
 
       const rating = await Rating.create({ rate, userId, deviceId });
 
-      return res.json(rating);
+      return res.json({...rating, deviceRate: device.rating});
    }
 
    async createComment(req, res, next) {
