@@ -52,9 +52,16 @@ class BasketController {
          return next(ApiError.badRequest("Корзина пользователя не была найдена"));
       }
 
-      const { count, rows: devices } = await BasketDevice.findAndCountAll({
+      const { count, rows: basketDevices } = await BasketDevice.findAndCountAll({
          where: { basketId: basket.id },
       });
+
+      const devices = [];
+
+      for (const basketDevice of basketDevices) {
+         const device = await Device.findOne({ where: { id: basketDevice.deviceId } });
+         devices.push(device);
+      }
 
       return res.json({
          count,
