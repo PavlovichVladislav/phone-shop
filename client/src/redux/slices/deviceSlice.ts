@@ -1,52 +1,41 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { ICategory, IDevice } from "../../models/AppModels";
+import { IComment, IDevice } from "../../models/AppModels";
 
-export interface DeviceState {
-   types: ICategory[];
-   brands: ICategory[];
-   devices: IDevice[];
-   count: number;
-   curBrandId: number | null;
-   curTypeId: number | null;
+export type DeviceState = {
+   device: IDevice;
+   comments: IComment[];
 }
 
 const initialState: DeviceState = {
-   types: [],
-   brands: [],
-   devices: [],
-   count: 0,
-   curBrandId: null,
-   curTypeId: null
+   device: {
+      id: 0,
+      img: "",
+      info: [],
+      name: "",
+      price: 0,
+      rating: 0,
+   },
+   comments: [],
 };
 
 export const deviceSlice = createSlice({
    name: "device",
    initialState,
    reducers: {
-      setTypes: (state, action: PayloadAction<ICategory[]>) => {
-         state.types = action.payload;
+      setDevice: (state, action: PayloadAction<IDevice>) => {
+         state.device = action.payload;
       },
-      setBrands: (state, action: PayloadAction<ICategory[]>) => {
-         state.brands = action.payload;
+      setComments: (state, action: PayloadAction<IComment[]>) => {
+         state.comments = action.payload;
       },
-      setDeives: (state, action: PayloadAction<IDevice[]>) => {
-         state.devices = action.payload;
+      setRate: (state, action: PayloadAction<number>) => {
+         state.device.rating = action.payload;
       },
-      setCount: (state, action: PayloadAction<number>) => {
-         state.count = action.payload;
-      },
-      setBrand: (state, action: PayloadAction<number | null>) => {
-         state.curBrandId = action.payload;
-      },
-      setType: (state, action: PayloadAction<number | null>) => {
-         state.curTypeId = action.payload;
-      }
-
    },
 });
 
-export const { setBrands, setDeives, setTypes, setCount, setBrand, setType } = deviceSlice.actions;
+export const { setDevice, setComments, setRate } = deviceSlice.actions;
 
 export default deviceSlice.reducer;

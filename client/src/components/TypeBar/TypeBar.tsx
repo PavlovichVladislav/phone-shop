@@ -3,11 +3,11 @@ import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { ListGroup } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import { fetchTypes } from "../../http/deviceApi";
-import { setType, setTypes } from "../../redux/slices/deviceSlice";
+import { setCurType, setTypes } from "../../redux/slices/shopSlice";
 import { ICategory } from "../../models/AppModels";
 
 export const TypeBar = () => {
-   const { types } = useAppSelector((store) => store.device);
+   const { types } = useAppSelector((store) => store.shop);
    const [searchParams, setSearchParams] = useSearchParams();
 
    const dispatch = useAppDispatch();
@@ -18,7 +18,7 @@ export const TypeBar = () => {
       searchParams.set("type", type.query);
       searchParams.set("page", "1");
       setSearchParams(searchParams);
-      dispatch(setType(type.id));
+      dispatch(setCurType(type.id));
    };
 
    useEffect(() => {

@@ -5,13 +5,13 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./NavBar.module.css";
 import { Button } from "react-bootstrap";
 import { ADMIN_ROUTE, LOGIN_ROUTE } from "../../utils/constants";
 import { setIsAuth, setUser } from "../../redux/slices/userSlice";
-import { setBrand, setType } from "../../redux/slices/deviceSlice";
+import { setCurBrand, setCurType } from "../../redux/slices/shopSlice";
 
 export const NavBar = () => {
    const { _isAuth, user } = useAppSelector((state) => state.user);
@@ -26,8 +26,8 @@ export const NavBar = () => {
    };
 
    const onBackToMain = () => {
-      dispatch(setBrand(null));
-      dispatch(setType(null));
+      dispatch(setCurBrand(null));
+      dispatch(setCurType(null));
       navigate('/');
    }
 

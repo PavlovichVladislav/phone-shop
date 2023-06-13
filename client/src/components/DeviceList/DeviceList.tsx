@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 
 import { fetchDevices } from "../../http/deviceApi";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { setCount, setDeives } from "../../redux/slices/deviceSlice";
+import { setCount, setDeives } from "../../redux/slices/shopSlice";
 
 import { DeviceCard } from "../DeiceCard";
 import { Col, Row } from "react-bootstrap";
@@ -11,7 +11,7 @@ import { Col, Row } from "react-bootstrap";
 import { ITEMS_IN_PAGE } from "../../utils/constants";
 
 export const DeviceList = () => {
-   const { devices, curBrandId, curTypeId } = useAppSelector((state) => state.device);
+   const { devices, curBrandId, curTypeId } = useAppSelector((state) => state.shop);
    const [searchParams] = useSearchParams();
    const dispatch = useAppDispatch();
    const page = searchParams.get("page") || 1;

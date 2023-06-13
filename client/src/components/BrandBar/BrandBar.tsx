@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import clsx from "clsx";
 
 import { fetchBrands } from "../../http/deviceApi";
-import { setBrand, setBrands } from "../../redux/slices/deviceSlice";
+import { setCurBrand, setBrands } from "../../redux/slices/shopSlice";
 
 import { Card, Form } from "react-bootstrap";
 
@@ -13,7 +13,7 @@ import { ICategory } from "../../models/AppModels";
 import styles from "./Brand.module.css";
 
 export const BrandBar = () => {
-   const { brands } = useAppSelector((store) => store.device);
+   const { brands } = useAppSelector((store) => store.shop);
    const [searchParams, setSearchParams] = useSearchParams();
    const dispatch = useAppDispatch();
    const currentBrand = searchParams.get("brand");
@@ -22,7 +22,7 @@ export const BrandBar = () => {
       searchParams.set("brand", brand.query);
       searchParams.set("page", "1");
       setSearchParams(searchParams);
-      dispatch(setBrand(brand.id));
+      dispatch(setCurBrand(brand.id));
    };
 
    useEffect(() => {

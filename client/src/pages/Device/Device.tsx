@@ -8,24 +8,25 @@ import { fetchOneDevice } from "../../http/deviceApi";
 import { useParams } from "react-router-dom";
 import { CreateReview } from "../../components/modals/CreateReview";
 import { createReview, fetchComments } from "../../http/reviewApi";
-import { useAppSelector } from "../../hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { RateToolbar } from "../../components/RateToolbar";
 import { DeviceComments } from "../../components/DeviceComments";
-
-const rates = [1, 2, 3, 4, 5];
+import { DeviceChar } from "../../components/DeviceChar";
+import { RateInfo } from "../../components/RateInfo/RateInfo";
+import { setComments, setDevice, setRate } from "../../redux/slices/deviceSlice";
 
 export const Device = () => {
-   const [device, setDevice] = useState<IDevice | null>(null);
    const [reviewVisible, setReviewVisible] = useState(false);
-   const [comments, setComments] = useState<IComment[]>([]);
+   const dispatch = useAppDispatch();
+
+   const { id: deviceId, img, price, info } = useAppSelector((state) => state.device.device);
    const { user } = useAppSelector((state) => state.user);
    const { id } = useParams();
-   const [rate, setRate] = useState<number | null>(null);
 
    useEffect(() => {
       if (id) {
-         fetchOneDevice(+id).then((device) => setDevice(device));
-         fetchComments(+id).then((comments) => setComments(comments));
+         fetchOneDevice(+id).then((device) => dispatch(setDevice(device)));
+         fetchComments(+id).then((comments) => dispatch(setComments(comments)));
       }
    }, []);
 
@@ -35,7 +36,7 @@ export const Device = () => {
          return;
       }
 
-      if (!device) {
+      if (!deviceId) {
          alert("Произошла ошибка: устройство не найдено");
          return;
       }
@@ -45,50 +46,34 @@ export const Device = () => {
          return;
       }
 
-      createReview(selectedRate, user.id, device.id)
+      createReview(selectedRate, user.id, deviceId)
          .then(({ deviceRate }) => {
-            setRate(deviceRate);
+            dispatch(setRate(deviceRate));
             alert("Спасибо за ваш отзыв!");
          })
          .catch(() => alert("ошибка"));
    };
 
-   const loadComments = () => {
-      if (id) {
-         fetchComments(+id).then((comments) => setComments(comments));
-      }
-   };
-
-   if (!device) return <Spinner />;
+   if (!deviceId) return <Spinner />;
 
    return (
       <Container className="mt-5">
          <Row>
             <Col md={4}>
-               <Image width={300} height={300} src={process.env.REACT_APP_API_URL + device.img} />
+               <Image width={300} height={300} src={process.env.REACT_APP_API_URL + img} />
             </Col>
             <Col md={4}>
-               <Row className="d-flex flex-column align-items-center">
-                  <h2>{device.name}</h2>
-                  <div
-                     className={clsx(
-                        "d-flex align-items-center justify-content-center",
-                        styles.star
-                     )}
-                  >
-                     {rate || device.rating}
-                  </div>
-               </Row>
+               <RateInfo />
             </Col>
-            <Col md={4}>
+            <Col md={4} className="d-flex flex-column align-items-end">
                <Card
                   className={clsx(
                      "d-flex flex-column align-items-center justify-content-around",
                      styles.card
                   )}
                >
-                  <h3>Цена: {device.price} руб.</h3>
-                  <RateToolbar items={rates} onSelectItem={sendReview} />
+                  <h3>Цена: {price} руб.</h3>
+                  <RateToolbar onSelectItem={sendReview} />
                   <Button variant="warning">Добавить в корзину</Button>
                   <Button variant="warning" onClick={() => setReviewVisible(true)}>
                      Оставить отзыв
@@ -96,24 +81,16 @@ export const Device = () => {
                </Card>
             </Col>
          </Row>
-         <Row className="d-flex flex-column m-3">
-            <ListGroup>
-               <h1>Характеристики</h1>
-               {device.info.map((info) => (
-                  <ListGroup.Item key={info.id}>
-                     {info.title}: {info.description}
-                  </ListGroup.Item>
-               ))}
-            </ListGroup>
+         <Row className="d-flex flex-column m-3 mt-5">
+            <DeviceChar chars={info} />
          </Row>
          <Row className="d-flex flex-column m-3">
-            <DeviceComments comments={comments} />
+            <DeviceComments />
          </Row>
          <CreateReview
             isShow={reviewVisible}
             onClose={() => setReviewVisible(false)}
-            deviceId={device.id}
-            onSubmit={loadComments}
+            deviceId={deviceId}
          />
       </Container>
    );

@@ -2,20 +2,20 @@ import React, { useState } from "react";
 import { ModalWrapper } from "../ModalWrapper";
 import { Form } from "react-bootstrap";
 
-import { createComment } from "../../../http/reviewApi";
-import { useAppSelector } from "../../../hooks/reduxHooks";
+import { createComment, fetchComments } from "../../../http/reviewApi";
+import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
+import { setComments } from "../../../redux/slices/deviceSlice";
 
 interface Props {
    onClose: () => void;
    isShow: boolean;
    deviceId: number;
-   onSubmit: () => void;
 }
 
-export const CreateReview: React.FC<Props> = ({ isShow, onClose, deviceId, onSubmit }) => {
+export const CreateReview: React.FC<Props> = ({ isShow, onClose, deviceId }) => {
    const [feedBack, setFeedback] = useState("");
-
    const { user } = useAppSelector((state) => state.user);
+   const dispatch = useAppDispatch();
 
    const sendComment = () => {
       if (!user) {
@@ -30,13 +30,13 @@ export const CreateReview: React.FC<Props> = ({ isShow, onClose, deviceId, onSub
 
       createComment(feedBack, user.id, deviceId)
          .then(() => {
-            onSubmit();
+            fetchComments(deviceId).then((comments) => dispatch(setComments(comments)));
             onClose();
          })
          .catch(() => {
             alert(() => {
-               'Произошла ошибка'
-            })
+               "Произошла ошибка";
+            });
          })
          .finally(() => {
             setFeedback("");

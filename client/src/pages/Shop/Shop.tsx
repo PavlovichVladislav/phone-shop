@@ -8,7 +8,7 @@ import { useAppSelector } from "../../hooks/reduxHooks";
 import { ITEMS_IN_PAGE } from "../../utils/constants";
 
 export const Shop = () => {
-   const { count } = useAppSelector((state) => state.device);
+   const { count } = useAppSelector((state) => state.shop);
 
    return (
       <div>

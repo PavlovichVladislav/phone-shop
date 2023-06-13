@@ -3,7 +3,7 @@ import { Form } from "react-bootstrap";
 
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
 import { createDevice, fetchBrands, fetchTypes } from "../../../http/deviceApi";
-import { setBrands, setTypes } from "../../../redux/slices/deviceSlice";
+import { setBrands, setTypes } from "../../../redux/slices/shopSlice";
 
 import { ModalWrapper } from "../ModalWrapper";
 
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const CreateDevice: React.FC<Props> = ({ isShow, onClose }) => {
-   const { types, brands } = useAppSelector((state) => state.device);
+   const { types, brands } = useAppSelector((state) => state.shop);
    const [features, setFeatures] = useState<IFeature[]>([]);
 
    const [name, setName] = useState("");

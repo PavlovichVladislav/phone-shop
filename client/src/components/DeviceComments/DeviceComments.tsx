@@ -1,12 +1,11 @@
 import React from "react";
 import { ListGroup } from "react-bootstrap";
-import { IComment } from "../../models/AppModels";
+import { useAppSelector } from "../../hooks/reduxHooks";
 
-interface Props {
-   comments: IComment[];
-}
+export const DeviceComments: React.FC = () => {
+   const { comments } = useAppSelector(state => state.device)
 
-export const DeviceComments: React.FC<Props> = ({ comments }) => {
+   console.log('render');
    return (
       <ListGroup>
          <h1>Комментарии</h1>

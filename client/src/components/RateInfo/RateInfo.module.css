@@ -1,0 +1,10 @@
+.name {
+    text-align: center;
+}
+
+.star {
+    background: url("../../assets/Star\ 1.png") no-repeat center center;
+    width: 280px;
+    height: 280px;
+    font-size: 64px;
+}
