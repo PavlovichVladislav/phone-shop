@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./NavBar.module.css";
 import { Button } from "react-bootstrap";
-import { ADMIN_ROUTE, LOGIN_ROUTE } from "../../utils/constants";
+import { ADMIN_ROUTE, BASKET_ROUTE, LOGIN_ROUTE } from "../../utils/constants";
 import { setIsAuth, setUser } from "../../redux/slices/userSlice";
 import { setCurBrand, setCurType } from "../../redux/slices/shopSlice";
 
@@ -41,7 +41,10 @@ export const NavBar = () => {
                <Nav className="ml-auto">
                   {_isAuth ? (
                      <>
-                        <Button variant={"outline-light"} onClick={() => navigate(ADMIN_ROUTE)}>
+                        <Button variant={"outline-light"} onClick={() => navigate(BASKET_ROUTE)}>
+                           Корзина
+                        </Button>
+                        <Button className="ms-2" variant={"outline-light"} onClick={() => navigate(ADMIN_ROUTE)}>
                            Панель администратора
                         </Button>
                         <Button className="ms-2" variant={"outline-light"} onClick={onExit}>

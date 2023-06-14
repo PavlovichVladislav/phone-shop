@@ -1,13 +1,35 @@
 import { $authHost } from ".";
-import { IDevice } from "../models/AppModels";
+import { IBasketDevice } from "../models/AppModels";
 
-interface IGetBasket {
+interface IGetBasketRes {
    count: number;
-   devices: IDevice[];
+   devices: IBasketDevice[];
 }
 
-export const getBasketDevices = async (userId: number): Promise<IGetBasket> => {
-   const { data } = await $authHost.get<IGetBasket>(`api/basket/${userId}`);
+interface IAddBaksetRes {
+   id: number;
+   basketId: number;
+   deviceId: number;
+}
+
+export const getBasketDevices = async (userId: number): Promise<IGetBasketRes> => {
+   const { data } = await $authHost.get<IGetBasketRes>(`api/basket/${userId}`);
 
    return data;
+};
+
+export const addBasketDevice = async (userId: number, deviceId: number): Promise<IAddBaksetRes> => {
+   const { data } = await $authHost.post<IAddBaksetRes>(`api/basket/`, { userId, deviceId });
+
+   const { basketId, id } = data;
+
+   return {
+      basketId,
+      deviceId,
+      id,
+   };
+};
+
+export const deleteBasketDevice = async (baskedDeviceId: number) => {
+   const { data } = await $authHost.delete<IAddBaksetRes>(`api/basket/${baskedDeviceId}`);
 };

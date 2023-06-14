@@ -1,6 +1,7 @@
 .img {
     width: 116px;
     height: 116px;
+    object-fit: scale-down;
 }
 
 .card {

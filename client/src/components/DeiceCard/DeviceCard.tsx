@@ -7,6 +7,8 @@ import { IDevice } from "../../models/AppModels";
 
 import styles from "./DeviceCard.module.css";
 import star from "../../assets/star.png";
+import { addBasketDevice } from "../../http/basketApi";
+import { useAppSelector } from "../../hooks/reduxHooks";
 
 interface Props {
    device: IDevice;
@@ -14,6 +16,15 @@ interface Props {
 
 export const DeviceCard: React.FC<Props> = ({ device }) => {
    const { id, img, name, price, rating } = device;
+   const { user } = useAppSelector((state) => state.user);
+
+   const onAddBasket = () => {
+      if (user) {
+         addBasketDevice(user.id, id);
+      } else {
+         alert("Необходимо авторизоваться");
+      }
+   };
 
    return (
       <Card className={clsx("mt-3", styles.card)}>
@@ -33,7 +44,7 @@ export const DeviceCard: React.FC<Props> = ({ device }) => {
                   <Image className={styles.star} src={star} />
                </div>
             </div>
-            <Button variant="warning" className={clsx("mt-2", styles.button)}>
+            <Button variant="warning" className={clsx("mt-2", styles.button)} onClick={onAddBasket}>
                Добавить в корзину
             </Button>
          </Card.Body>

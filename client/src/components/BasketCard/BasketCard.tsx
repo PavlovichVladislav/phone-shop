@@ -1,16 +1,25 @@
 import React from "react";
-import { IDevice } from "../../models/AppModels";
-import { Card } from "react-bootstrap";
+import { IBasketDevice } from "../../models/AppModels";
+import { Button, Card } from "react-bootstrap";
 
 import styles from "./BasketCard.module.css";
 import clsx from "clsx";
+import { deleteBasketDevice } from "../../http/basketApi";
+import { removeBasketDevice } from "../../redux/slices/basketSlice";
+import { useAppDispatch } from "../../hooks/reduxHooks";
 
 interface Props {
-   device: IDevice;
+   device: IBasketDevice;
 }
 
 export const BasketCard: React.FC<Props> = ({ device }) => {
-   const { img, name, price } = device;
+   const { img, name, price, basketDeviceId } = device;
+   const dispatch = useAppDispatch();
+
+   const onDeleteDevice = () => {
+      dispatch(removeBasketDevice(basketDeviceId));
+      deleteBasketDevice(basketDeviceId);
+   };
 
    return (
       <Card className="mt-3">
@@ -22,6 +31,9 @@ export const BasketCard: React.FC<Props> = ({ device }) => {
             />
             <Card.Title>{name}</Card.Title>
             <Card.Subtitle>{price} ₽</Card.Subtitle>
+            <Button variant="warning" onClick={onDeleteDevice}>
+               Убрать из корзины
+            </Button>
          </Card.Body>
       </Card>
    );
