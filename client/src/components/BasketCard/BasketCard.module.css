@@ -4,6 +4,10 @@
     object-fit: scale-down;
 }
 
-.card {
+.cardLeft, .cardRight {
     gap: 32px;
+}
+
+.title {
+    width: 292px;
 }

@@ -27,7 +27,7 @@ export interface IDevice {
    info: IFeature[];
 }
 
-export type IBasketDevice = IDevice & { basketDeviceId: number };
+export type IBasketDevice = IDevice & { basketDeviceId: number; count: number };
 
 export interface IRate {
    id: number;

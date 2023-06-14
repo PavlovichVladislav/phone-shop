@@ -33,3 +33,15 @@ export const addBasketDevice = async (userId: number, deviceId: number): Promise
 export const deleteBasketDevice = async (baskedDeviceId: number) => {
    const { data } = await $authHost.delete<IAddBaksetRes>(`api/basket/${baskedDeviceId}`);
 };
+
+export const incBasketDevice = async (baskedDeviceId: number) => {
+   const { data } = await $authHost.post<IBasketDevice>(`api/basket/inc/${baskedDeviceId}`);
+
+   return data;
+};
+
+export const decBasketDevice = async (baskedDeviceId: number) => {
+   const { data } = await $authHost.post<IBasketDevice | {}>(`api/basket/dec/${baskedDeviceId}`);
+
+   return data;
+};
