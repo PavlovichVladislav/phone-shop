@@ -1,5 +1,6 @@
 const { BasketDevice, Basket, Device } = require("../models/models");
 const ApiError = require("../error/ApiError");
+const { where } = require("sequelize");
 
 class BasketController {
    async create(req, res, next) {
@@ -22,7 +23,14 @@ class BasketController {
             return next(ApiError.badRequest("Корзина пользователя не была найдена"));
          }
 
-         const basketDevice = await BasketDevice.create({ basketId, deviceId });
+         let basketDevice = await BasketDevice.findOne({ where: { deviceId, basketId } });
+
+         if (basketDevice) {
+            basketDevice.count = basketDevice.count + 1;
+            basketDevice.save();
+         } else {
+            basketDevice = await BasketDevice.create({ basketId, deviceId });
+         }
 
          return res.json(basketDevice);
       } catch (error) {
@@ -31,7 +39,46 @@ class BasketController {
    }
 
    async incDeviceCount(req, res, next) {
-      const { deviceId } = req.body;
+      const { basketDeviceId } = req.params;
+
+      if (!basketDeviceId) {
+         return next(ApiError.badRequest("Необходимо указать id устройства"));
+      }
+
+      const basketDevice = await BasketDevice.findOne({ where: { id: basketDeviceId } });
+
+      if (!basketDevice) {
+         return next(ApiError.badRequest("Устройство не было найдено"));
+      }
+
+      basketDevice.count = basketDevice.count + 1;
+      basketDevice.save();
+
+      return res.json(basketDevice);
+   }
+
+   async decDeviceCount(req, res, next) {
+      const { basketDeviceId } = req.params;
+
+      if (!basketDeviceId) {
+         return next(ApiError.badRequest("Необходимо указать id устройства"));
+      }
+
+      const basketDevice = await BasketDevice.findOne({ where: { id: basketDeviceId } });
+
+      if (!basketDevice) {
+         return next(ApiError.badRequest("Устройство не было найдено"));
+      }
+
+      if (basketDevice.count === 1) {
+         await BasketDevice.destroy({ where: { id: basketDeviceId } });
+         return res.json({});
+      }
+
+      basketDevice.count = basketDevice.count - 1;
+      basketDevice.save();
+
+      return res.json(basketDevice);
    }
 
    async delete(req, res, next) {
@@ -71,7 +118,11 @@ class BasketController {
 
       for (const basketDevice of basketDevices) {
          const device = await Device.findOne({ where: { id: basketDevice.deviceId } });
-         devices.push({...device.toJSON(), basketDeviceId: basketDevice.id});
+         devices.push({
+            ...device.toJSON(),
+            basketDeviceId: basketDevice.id,
+            count: basketDevice.count,
+         });
       }
 
       return res.json({
