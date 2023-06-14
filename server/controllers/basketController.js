@@ -4,10 +4,10 @@ const ApiError = require("../error/ApiError");
 class BasketController {
    async create(req, res, next) {
       try {
-         const { basketId, deviceId } = req.body;
+         const { userId, deviceId } = req.body;
 
-         if (!basketId || !deviceId) {
-            return next(ApiError.badRequest("Необходимо указать id корзины и устройства"));
+         if (!userId || !deviceId) {
+            return next(ApiError.badRequest("Необходимо указать id пользователя и устройства"));
          }
 
          const device = await Device.findOne({ where: { id: deviceId } });
@@ -16,11 +16,22 @@ class BasketController {
             return next(ApiError.badRequest("Устройство не было найдено"));
          }
 
+         const { id: basketId } = await Basket.findOne({ where: { userId } });
+
+         if (!basketId) {
+            return next(ApiError.badRequest("Корзина пользователя не была найдена"));
+         }
+
          const basketDevice = await BasketDevice.create({ basketId, deviceId });
+
          return res.json(basketDevice);
       } catch (error) {
          return next(ApiError.badRequest("Неизвестная ошибка"));
       }
+   }
+
+   async incDeviceCount(req, res, next) {
+      const { deviceId } = req.body;
    }
 
    async delete(req, res, next) {
@@ -60,7 +71,7 @@ class BasketController {
 
       for (const basketDevice of basketDevices) {
          const device = await Device.findOne({ where: { id: basketDevice.deviceId } });
-         devices.push(device);
+         devices.push({...device.toJSON(), basketDeviceId: basketDevice.id});
       }
 
       return res.json({
