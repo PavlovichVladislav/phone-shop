@@ -5,7 +5,6 @@ import { useAppSelector } from "../../hooks/reduxHooks";
 export const DeviceComments: React.FC = () => {
    const { comments } = useAppSelector(state => state.device)
 
-   console.log('render');
    return (
       <ListGroup>
          <h1>Комментарии</h1>

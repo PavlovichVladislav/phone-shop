@@ -19,7 +19,7 @@ export const CreateReview: React.FC<Props> = ({ isShow, onClose, deviceId }) => 
 
    const sendComment = () => {
       if (!user) {
-         alert("Не удалось получить информацию о пользователе, попробуйте перезайти");
+         alert("Не удалось получить информацию о пользователе, попробуйте авторизоваться снова");
          return;
       }
 

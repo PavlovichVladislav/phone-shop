@@ -33,7 +33,6 @@ export const TypeBar = () => {
                active={currentType === type.query}
                action
                onClick={() => onChooseType(type)}
-               //    variant="light"
             >
                {type.name}
             </ListGroup.Item>

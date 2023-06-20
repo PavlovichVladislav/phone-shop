@@ -17,11 +17,15 @@ function App() {
             dispatch(setUser(user));
             dispatch(setIsAuth(true));
          })
-         .finally(() => setLoading(false))
+         .catch(() => {
+            dispatch(setUser(null));
+            dispatch(setIsAuth(false));
+         })
+         .finally(() => setLoading(false));
    }, []);
 
    if (loading) {
-      return <Spinner animation="grow" />;
+      return <Spinner animation="grow"/>;
    }
 
    return (

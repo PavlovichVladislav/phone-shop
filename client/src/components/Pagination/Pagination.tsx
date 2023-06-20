@@ -20,13 +20,13 @@ export const Paging: React.FC<Props> = ({ count, itemsInPage }) => {
       });
    };
 
+   console.log(count);
+
    if (pages <= 1) return null;
 
    const selectionVisiblePages = (curPage: number, pagesCount: number, siblingCount: number) => {
       const pages: number[] = [];
       const totalVisibleCount = siblingCount * 2 + 1;
-
-      console.log(pagesCount);
 
       if (pagesCount < totalVisibleCount) {
          for (let i = 1; i <= pagesCount; i++) {

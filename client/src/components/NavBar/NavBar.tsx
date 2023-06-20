@@ -1,20 +1,20 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import { Button } from "react-bootstrap";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { useNavigate } from "react-router-dom";
-
-import styles from "./NavBar.module.css";
-import { Button } from "react-bootstrap";
-import { ADMIN_ROUTE, BASKET_ROUTE, LOGIN_ROUTE } from "../../utils/constants";
 import { setIsAuth, setUser } from "../../redux/slices/userSlice";
 import { setCurBrand, setCurType } from "../../redux/slices/shopSlice";
 
+import { ADMIN_ROUTE, BASKET_ROUTE, LOGIN_ROUTE, REG_ROUTE } from "../../utils/constants";
+
+import styles from "./NavBar.module.css";
+
 export const NavBar = () => {
-   const { _isAuth, user } = useAppSelector((state) => state.user);
+   const { _isAuth } = useAppSelector((state) => state.user);
    const navigate = useNavigate();
    const dispatch = useAppDispatch();
 
@@ -55,6 +55,9 @@ export const NavBar = () => {
                      <>
                         <Button variant={"outline-light"} onClick={() => navigate(LOGIN_ROUTE)}>
                            Авторизация{" "}
+                        </Button>
+                        <Button variant={"outline-light"} className="ms-2" onClick={() => navigate(REG_ROUTE)}>
+                           Регистрация{" "}
                         </Button>
                      </>
                   )}

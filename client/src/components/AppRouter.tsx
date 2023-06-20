@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 
-import { authRoutes, publicRoutes } from "../routes";
+import { authRoutes, notAuthRoutes, publicRoutes } from "../routes";
 import { useAppSelector } from "../hooks/reduxHooks";
 
 export const AppRouter = () => {
@@ -11,6 +11,10 @@ export const AppRouter = () => {
       <Routes>
          {_isAuth &&
             authRoutes.map(({ element, path }) => (
+               <Route path={path} element={element} key={path} />
+            ))}
+         {!_isAuth &&
+            notAuthRoutes.map(({ element, path }) => (
                <Route path={path} element={element} key={path} />
             ))}
          {publicRoutes.map(({ element, path }) => (
