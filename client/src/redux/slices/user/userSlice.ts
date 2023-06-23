@@ -30,52 +30,26 @@ export const userSlice = createSlice({
       },
    },
    extraReducers: (builder) => {
-      builder
-         .addCase(regUser.pending, (state, _) => {
-            state.isLoading = true;
-         })
-         .addCase(regUser.fulfilled, (state, { payload: user }) => {
-            state.isLoading = false;
-            state.error = "";
-            state.user = user;
-            state._isAuth = true;
-         })
-         .addCase(regUser.rejected, (state, { payload: error }) => {
-            state.isLoading = false;
-            state.error = error as string;
-            state.user = null;
-            state._isAuth = false;
-         })
-         .addCase(logUser.pending, (state, _) => {
-            state.isLoading = true;
-         })
-         .addCase(logUser.fulfilled, (state, { payload: user }) => {
-            state.isLoading = false;
-            state.error = "";
-            state.user = user;
-            state._isAuth = true;
-         })
-         .addCase(logUser.rejected, (state, { payload: error }) => {
-            state.isLoading = false;
-            state.error = error as string;
-            state.user = null;
-            state._isAuth = false;
-         })
-         .addCase(checkUsersAuth.pending, (state, _) => {
-            state.isLoading = true;
-         })
-         .addCase(checkUsersAuth.fulfilled, (state, { payload: user }) => {
-            state.isLoading = false;
-            state.error = "";
-            state.user = user;
-            state._isAuth = true;
-         })
-         .addCase(checkUsersAuth.rejected, (state, { payload: error }) => {
-            state.isLoading = false;
-            state.error = error as string;
-            state.user = null;
-            state._isAuth = false;
-         });
+      const thunks = [regUser, logUser, checkUsersAuth];
+
+      thunks.forEach((thunk) => {
+         builder
+            .addCase(thunk.pending, (state, _) => {
+               state.isLoading = true;
+            })
+            .addCase(thunk.fulfilled, (state, { payload: user }) => {
+               state.isLoading = false;
+               state.error = "";
+               state.user = user;
+               state._isAuth = true;
+            })
+            .addCase(thunk.rejected, (state, { payload: error }) => {
+               state.isLoading = false;
+               state.error = error as string;
+               state.user = null;
+               state._isAuth = false;
+            });
+      });
    },
 });
 
