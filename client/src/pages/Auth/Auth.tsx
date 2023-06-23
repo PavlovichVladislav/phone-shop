@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
-
-import { Button, Card, Container, Form, Row } from "react-bootstrap";
-
-import styles from "./Auth.module.css";
-import clsx from "clsx";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { LOGIN_ROUTE, REG_ROUTE } from "../../utils/constants";
+import clsx from "clsx";
+
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { logUser, regUser } from "../../redux/slices/user/userThunks";
+
+import { Button, Card, Container, Form, Row } from "react-bootstrap";
 import { Loader } from "../../components/Loader";
+
+import { LOGIN_ROUTE, REG_ROUTE } from "../../utils/constants";
+
+import styles from "./Auth.module.css";
 
 export const Auth = () => {
    const [email, setEmail] = useState("");
@@ -17,30 +19,31 @@ export const Auth = () => {
    const dispatch = useAppDispatch();
    const navigate = useNavigate();
 
-   const { _isAuth, isLoading } = useAppSelector((state) => state.user);
+   const { isLoading } = useAppSelector((state) => state.user);
 
    const isLogin = pathname === LOGIN_ROUTE;
 
-   useEffect(() => {
+   const clearForm = () => {
       setEmail("");
       setPassword("");
-   }, [isLogin]);
+   };
 
-   useEffect(() => {
-      if (_isAuth) {
-         navigate("/");
-         setEmail("");
-         setPassword("");
-      }
-   }, [_isAuth]);
+   const afterAuth = () => {
+      navigate("/");
+      clearForm();
+   };
 
    const handleBtnClick = () => {
       if (isLogin) {
-         dispatch(logUser({ email, password }));
+         dispatch(logUser({ email, password, afterAuth }));
       } else {
-         dispatch(regUser({ email, password }));
+         dispatch(regUser({ email, password, afterAuth }));
       }
    };
+
+   useEffect(() => {
+      clearForm();
+   }, [isLogin]);
 
    if (isLoading) return <Loader />;
 
