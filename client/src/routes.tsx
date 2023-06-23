@@ -25,18 +25,15 @@ export const authRoutes = [
    },
 ];
 
-export const notAuthRoutes = [
-    {
-       path: LOGIN_ROUTE,
-       element: <Auth />,
-    },
-    {
-       path: REG_ROUTE,
-       element: <Auth />,
-    },
- ];
-
 export const publicRoutes = [
+   {
+      path: LOGIN_ROUTE,
+      element: <Auth />,
+   },
+   {
+      path: REG_ROUTE,
+      element: <Auth />,
+   },
    {
       path: SHOP_ROUTE,
       element: <Shop />,
@@ -50,5 +47,3 @@ export const publicRoutes = [
       element: <NotFound />,
    },
 ];
-
-

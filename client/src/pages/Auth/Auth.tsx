@@ -6,11 +6,9 @@ import styles from "./Auth.module.css";
 import clsx from "clsx";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { LOGIN_ROUTE, REG_ROUTE } from "../../utils/constants";
-import { login, registration } from "../../http/userApi";
-import { useAppDispatch } from "../../hooks/reduxHooks";
-import { TUser } from "../../models/AppModels";
-import { setIsAuth, setUser } from "../../redux/slices/userSlice";
-import { AxiosError } from "axios";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { logUser, regUser } from "../../redux/slices/user/userThunks";
+import { Loader } from "../../components/Loader";
 
 export const Auth = () => {
    const [email, setEmail] = useState("");
@@ -19,6 +17,8 @@ export const Auth = () => {
    const dispatch = useAppDispatch();
    const navigate = useNavigate();
 
+   const { _isAuth, isLoading } = useAppSelector((state) => state.user);
+
    const isLogin = pathname === LOGIN_ROUTE;
 
    useEffect(() => {
@@ -26,69 +26,59 @@ export const Auth = () => {
       setPassword("");
    }, [isLogin]);
 
-   const handleBtnClick = async () => {
-      try {
-         let user: TUser = null;
-
-         if (isLogin) {
-            user = await login(email, password);
-         } else {
-            user = await registration(email, password);
-         }
-
-         dispatch(setUser(user));
-         dispatch(setIsAuth(true));
+   useEffect(() => {
+      if (_isAuth) {
          navigate("/");
          setEmail("");
          setPassword("");
-      } catch (e) {
-         const err = e as AxiosError<{ message: string }>;
+      }
+   }, [_isAuth]);
 
-         if (err) {
-            alert(err.response?.data.message);
-         } else {
-            alert("незивестная ошибка");
-         }
+   const handleBtnClick = () => {
+      if (isLogin) {
+         dispatch(logUser({ email, password }));
+      } else {
+         dispatch(regUser({ email, password }));
       }
    };
 
+   if (isLoading) return <Loader />;
+
    return (
-         <Container
-            className={clsx("d-flex justify-content-center align-items-center", styles.auth)}
-         >
-            <Card className={clsx("p-5", styles.card)}>
-               <h2 className="m-auto">{isLogin ? "Авторизация" : "Регистрация"}</h2>
-               <Form className="d-flex flex-column">
-                  <Form.Control
-                     className="mt-3"
-                     placeholder="Введите ваш email..."
-                     value={email}
-                     onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <Form.Control
-                     className="mt-3"
-                     placeholder="Введите ваш пароль..."
-                     type="password"
-                     value={password}
-                     onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <Row className="d-flex justify-content-between ps-3 pe-3">
-                     {isLogin ? (
-                        <div className="mt-3">
-                           Ещё не зарегистрированы?{" "}
-                           <NavLink to={REG_ROUTE}>Зарегистрироваться</NavLink>
-                        </div>
-                     ) : (
-                        <div className="mt-3">
-                           Есть аккаунт? <NavLink to={LOGIN_ROUTE}>Войдите</NavLink>
-                        </div>
-                     )}
-                     <Button className="mt-3" variant="outline-success" onClick={handleBtnClick}>
-                        {isLogin ? "Войти" : "Регистрация"}
-                     </Button>
-                  </Row>
-               </Form>
-            </Card>
-         </Container>
+      <Container className={clsx("d-flex justify-content-center align-items-center", styles.auth)}>
+         <Card className={clsx("p-5", styles.card)}>
+            <h2 className="m-auto">{isLogin ? "Авторизация" : "Регистрация"}</h2>
+            <Form className="d-flex flex-column">
+               <Form.Control
+                  className="mt-3"
+                  placeholder="Введите ваш email..."
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+               />
+               <Form.Control
+                  className="mt-3"
+                  placeholder="Введите ваш пароль..."
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+               />
+               <Row className="d-flex justify-content-between ps-3 pe-3">
+                  {isLogin ? (
+                     <div className="mt-3">
+                        Ещё не зарегистрированы?{" "}
+                        <NavLink to={REG_ROUTE}>Зарегистрироваться</NavLink>
+                     </div>
+                  ) : (
+                     <div className="mt-3">
+                        Есть аккаунт? <NavLink to={LOGIN_ROUTE}>Войдите</NavLink>
+                     </div>
+                  )}
+                  <Button className="mt-3" variant="outline-success" onClick={handleBtnClick}>
+                     {isLogin ? "Войти" : "Регистрация"}
+                  </Button>
+               </Row>
+            </Form>
+         </Card>
+      </Container>
    );
 };

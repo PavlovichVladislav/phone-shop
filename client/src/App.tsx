@@ -1,31 +1,21 @@
 import { AppRouter } from "./components/AppRouter";
-import { useEffect, useState } from "react";
-import { check } from "./http/userApi";
-import { useAppDispatch } from "./hooks/reduxHooks";
-import { setIsAuth, setUser } from "./redux/slices/userSlice";
-import { Spinner } from "react-bootstrap";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "./hooks/reduxHooks";
 import { BrowserRouter } from "react-router-dom";
 import { NavBar } from "./components/NavBar";
+import { checkUsersAuth } from "./redux/slices/user/userThunks";
+import { Loader } from "./components/Loader";
 
 function App() {
-   const [loading, setLoading] = useState(true);
    const dispatch = useAppDispatch();
+   const { isLoading } = useAppSelector((state) => state.user);
 
    useEffect(() => {
-      check()
-         .then((user) => {
-            dispatch(setUser(user));
-            dispatch(setIsAuth(true));
-         })
-         .catch(() => {
-            dispatch(setUser(null));
-            dispatch(setIsAuth(false));
-         })
-         .finally(() => setLoading(false));
+      dispatch(checkUsersAuth());
    }, []);
 
-   if (loading) {
-      return <Spinner animation="grow"/>;
+   if (isLoading) {
+      return <Loader/>;
    }
 
    return (
