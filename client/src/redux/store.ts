@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import user from "./slices/user/userSlice";
-import shop from "./slices/shopSlice";
+import shop from "./slices/shop/shopSlice";
 import device from "./slices/device/deviceSlice";
 import basket from "./slices/basketSlice";
 import comments from "./slices/comments/commentSlice";

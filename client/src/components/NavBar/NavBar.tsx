@@ -7,7 +7,7 @@ import { Button } from "react-bootstrap";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { setIsAuth, setUser } from "../../redux/slices/user/userSlice";
-import { setCurBrand, setCurType } from "../../redux/slices/shopSlice";
+import { setCurBrand, setCurType } from "../../redux/slices/shop/shopSlice";
 
 import { ADMIN_ROUTE, BASKET_ROUTE, LOGIN_ROUTE, REG_ROUTE } from "../../utils/constants";
 

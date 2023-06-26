@@ -30,6 +30,7 @@ export const Device = () => {
          dispatch(getOneDevice(+id));
          dispatch(getComments(+id));
       }
+      //eslint-disable-next-line
    }, []);
 
    const sendReview = (selectedRate: number) => {
@@ -64,7 +65,12 @@ export const Device = () => {
       <Container className="mt-5">
          <Row>
             <Col md={4}>
-               <Image width={300} height={300} src={process.env.REACT_APP_API_URL + img} />
+               <Image
+                  width={300}
+                  height={300}
+                  src={process.env.REACT_APP_API_URL + img}
+                  className={styles.img}
+               />
             </Col>
             <Col md={4}>
                <RateInfo />

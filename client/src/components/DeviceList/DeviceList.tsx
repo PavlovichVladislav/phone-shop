@@ -1,27 +1,31 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
-import { fetchDevices } from "../../http/deviceApi";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { setCount, setDeives } from "../../redux/slices/shopSlice";
 
 import { DeviceCard } from "../DeiceCard";
 import { Col, Row } from "react-bootstrap";
 
 import { ITEMS_IN_PAGE } from "../../utils/constants";
+import { getDevices } from "../../redux/slices/shop/shopThunks";
+import { Loader } from "../Loader";
 
 export const DeviceList = () => {
-   const { devices, curBrandId, curTypeId } = useAppSelector((state) => state.shop);
+   const { devices, curBrandId, curTypeId, isDevicesLoading } = useAppSelector(
+      (state) => state.shop
+   );
    const [searchParams] = useSearchParams();
    const dispatch = useAppDispatch();
    const page = searchParams.get("page") || 1;
 
    useEffect(() => {
-      fetchDevices(curBrandId, curTypeId, ITEMS_IN_PAGE, +page).then(({ devices, count }) => {
-         dispatch(setDeives(devices));
-         dispatch(setCount(count));
-      });
+      dispatch(
+         getDevices({ brandId: curBrandId, typeId: curTypeId, limit: ITEMS_IN_PAGE, page: +page })
+      );
+      // eslint-disable-next-line
    }, [page, curBrandId, curTypeId]);
+
+   if (isDevicesLoading) return <Loader />;
 
    return (
       <Row className="d-flex p-3">

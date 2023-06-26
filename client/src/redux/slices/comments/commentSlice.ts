@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import type { PayloadAction } from "@reduxjs/toolkit";
 import { IComment } from "../../../models/AppModels";
 import { getComments } from "./commentThunks";
 

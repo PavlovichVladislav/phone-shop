@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
-import { createDevice, fetchBrands, fetchTypes } from "../../../http/deviceApi";
-import { setBrands, setTypes } from "../../../redux/slices/shopSlice";
+import { createDevice } from "../../../http/deviceApi";
+import { getBrands, getTypes } from "../../../redux/slices/shop/shopThunks";
 
 import { ModalWrapper } from "../ModalWrapper";
-
-import { ICategory, IFeature } from "../../../models/AppModels";
 import { FeatureList } from "../../FeatureList";
 import { CustomDropdown } from "../../CustomDropdown";
+
+import { ICategory, IFeature } from "../../../models/AppModels";
 
 interface Props {
    onClose: () => void;
@@ -29,8 +29,9 @@ export const CreateDevice: React.FC<Props> = ({ isShow, onClose }) => {
    const dispatch = useAppDispatch();
 
    useEffect(() => {
-      fetchBrands().then((brands) => dispatch(setBrands(brands)));
-      fetchTypes().then((types) => dispatch(setTypes(types)));
+      dispatch(getBrands());
+      dispatch(getTypes());
+      //eslint-disable-next-line
    }, []);
 
    const addDevice = () => {
@@ -66,11 +67,13 @@ export const CreateDevice: React.FC<Props> = ({ isShow, onClose }) => {
                currentEntity={type}
                entities={types}
                setEntity={(entity: ICategory) => setType(entity)}
+               placeholder="Выберите тип устройства"
             />
             <CustomDropdown
                currentEntity={brand}
                entities={brands}
                setEntity={(entity: ICategory) => setBrand(entity)}
+               placeholder="Выберите бренд устройства"
             />
             <Form.Control
                placeholder="Введите стоимость устройства"

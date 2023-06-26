@@ -2,12 +2,13 @@ import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { ListGroup } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
-import { fetchTypes } from "../../http/deviceApi";
-import { setCurType, setTypes } from "../../redux/slices/shopSlice";
+import { setCurType } from "../../redux/slices/shop/shopSlice";
 import { ICategory } from "../../models/AppModels";
+import { getTypes } from "../../redux/slices/shop/shopThunks";
+import { Loader } from "../Loader";
 
 export const TypeBar = () => {
-   const { types } = useAppSelector((store) => store.shop);
+   const { types, isTypesLoading } = useAppSelector((store) => store.shop);
    const [searchParams, setSearchParams] = useSearchParams();
 
    const dispatch = useAppDispatch();
@@ -22,8 +23,11 @@ export const TypeBar = () => {
    };
 
    useEffect(() => {
-      fetchTypes().then((types) => dispatch(setTypes(types)));
+      dispatch(getTypes());
+      // eslint-disable-next-line
    }, []);
+
+   if (isTypesLoading) return <Loader />;
 
    return (
       <ListGroup>

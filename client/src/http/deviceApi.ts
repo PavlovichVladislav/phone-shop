@@ -1,5 +1,11 @@
 import { $authHost, $host } from ".";
-import { ICategory, IDevice, IFeature } from "../models/AppModels";
+import {
+   ICategory,
+   IDevice,
+   IFeature,
+   fetchDevicesArgs,
+   fetchDevicesRes,
+} from "../models/AppModels";
 
 export const createType = async (name: string, query: string): Promise<ICategory> => {
    const { data } = await $authHost.post<ICategory>("api/type/", { name, query });
@@ -11,10 +17,14 @@ export const createType = async (name: string, query: string): Promise<ICategory
    };
 };
 
-export const fetchTypes = async (): Promise<ICategory[]> => {
-   const { data } = await $host.get<ICategory[]>("api/type");
+export const fetchTypes = async (): Promise<ICategory[] | null> => {
+   try {
+      const { data } = await $host.get<ICategory[]>("api/type");
 
-   return data;
+      return data;
+   } catch (error) {
+      return null;
+   }
 };
 
 export const createBrand = async (name: string, query: string): Promise<ICategory> => {
@@ -27,10 +37,14 @@ export const createBrand = async (name: string, query: string): Promise<ICategor
    };
 };
 
-export const fetchBrands = async (): Promise<ICategory[]> => {
-   const { data } = await $host.get<ICategory[]>("api/brand");
+export const fetchBrands = async (): Promise<ICategory[] | null> => {
+   try {
+      const { data } = await $host.get<ICategory[]>("api/brand");
 
-   return data;
+      return data;
+   } catch (error) {
+      return null;
+   }
 };
 
 interface createDeviceParams {
@@ -70,22 +84,21 @@ export const createDevice = async ({
    };
 };
 
-export interface fetchDevicesRes {
-   count: number;
-   devices: IDevice[];
-}
+export const fetchDevices = async ({
+   brandId,
+   limit,
+   page,
+   typeId,
+}: fetchDevicesArgs): Promise<fetchDevicesRes | null> => {
+   try {
+      const { data } = await $host.get<fetchDevicesRes>("api/device", {
+         params: { brandId, typeId, limit, page },
+      });
 
-export const fetchDevices = async (
-   brandId: number | null,
-   typeId: number | null,
-   limit: number | null,
-   page: number | null
-): Promise<fetchDevicesRes> => {
-   const { data } = await $host.get<fetchDevicesRes>("api/device", {
-      params: { brandId, typeId, limit, page },
-   });
-
-   return data;
+      return data;
+   } catch (error) {
+      return null;
+   }
 };
 
 export const fetchOneDevice = async (id: number): Promise<IDevice | null> => {

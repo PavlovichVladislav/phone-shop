@@ -44,3 +44,15 @@ export interface IComment {
 }
 
 export type CreateReviewRes = IRate & { deviceRate: number };
+
+export interface fetchDevicesArgs {
+   brandId: number | null;
+   typeId: number | null;
+   limit: number | null;
+   page: number | null;
+}
+
+export interface fetchDevicesRes {
+   count: number;
+   devices: IDevice[];
+}

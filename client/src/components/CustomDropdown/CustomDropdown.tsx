@@ -6,13 +6,14 @@ interface Props {
    entities: ICategory[];
    setEntity: (entity: ICategory) => void;
    currentEntity: ICategory | undefined;
+   placeholder: string;
 }
 
-export const CustomDropdown: React.FC<Props> = ({ entities, setEntity, currentEntity }) => {
+export const CustomDropdown: React.FC<Props> = ({ entities, setEntity, currentEntity, placeholder }) => {
    return (
       <Dropdown className="mt-3">
          <Dropdown.Toggle variant="success" id="dropdown-basic">
-            {currentEntity?.name || "Выберите тип устройства"}
+            {currentEntity?.name || placeholder}
          </Dropdown.Toggle>
          <Dropdown.Menu>
             {entities.map((entity) => (

@@ -3,14 +3,15 @@ import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { useSearchParams } from "react-router-dom";
 import clsx from "clsx";
 
-import { fetchBrands } from "../../http/deviceApi";
-import { setCurBrand, setBrands } from "../../redux/slices/shopSlice";
+import { setCurBrand } from "../../redux/slices/shop/shopSlice";
+import { getBrands } from "../../redux/slices/shop/shopThunks";
 
 import { Card, Form } from "react-bootstrap";
 
 import { ICategory } from "../../models/AppModels";
 
 import styles from "./Brand.module.css";
+
 
 export const BrandBar = () => {
    const { brands } = useAppSelector((store) => store.shop);
@@ -26,7 +27,8 @@ export const BrandBar = () => {
    };
 
    useEffect(() => {
-      fetchBrands().then((brands) => dispatch(setBrands(brands)));
+      dispatch(getBrands());
+      // eslint-disable-next-line
    }, []);
 
    return (
