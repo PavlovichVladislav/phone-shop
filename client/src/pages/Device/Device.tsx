@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Card, Col, Container, Image, Row, Spinner } from "react-bootstrap";
+import { Button, Card, Col, Container, Image, Row } from "react-bootstrap";
 import clsx from "clsx";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
@@ -12,6 +12,7 @@ import { DeviceComments } from "../../components/DeviceComments";
 import { DeviceChar } from "../../components/DeviceChar";
 import { RateInfo } from "../../components/RateInfo/RateInfo";
 import { CreateReview } from "../../components/modals/CreateReview";
+import { Loader } from "../../components/Loader";
 
 import styles from "./Device.module.css";
 
@@ -57,7 +58,7 @@ export const Device = () => {
       );
    };
 
-   if (isDeviceLoading) return <Spinner />;
+   if (isDeviceLoading) return <Loader />;
 
    return (
       <Container className="mt-5">

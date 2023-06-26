@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, Navigate, useLocation, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
@@ -19,7 +19,7 @@ export const Auth = () => {
    const dispatch = useAppDispatch();
    const navigate = useNavigate();
 
-   const { isLoading } = useAppSelector((state) => state.user);
+   const { isLoading, _isAuth } = useAppSelector((state) => state.user);
 
    const isLogin = pathname === LOGIN_ROUTE;
 
@@ -44,6 +44,8 @@ export const Auth = () => {
    useEffect(() => {
       clearForm();
    }, [isLogin]);
+
+   if (_isAuth) return <Navigate to={"/"}/>
 
    if (isLoading) return <Loader />;
 
