@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import type { PayloadAction } from "@reduxjs/toolkit";
 import { IDevice } from "../../../models/AppModels";
-import { getOneDevice } from "./deviceThunks";
+import { getOneDevice, makeReview } from "./deviceThunks";
 
 export type DeviceState = {
    device: IDevice;
    isDeviceLoading: boolean;
    deviceError: string;
+   rateError: string;
 };
 
 const initialState: DeviceState = {
@@ -21,19 +21,13 @@ const initialState: DeviceState = {
    },
    isDeviceLoading: false,
    deviceError: "",
+   rateError: ""
 };
 
 export const deviceSlice = createSlice({
    name: "device",
    initialState,
-   reducers: {
-      setDevice: (state, action: PayloadAction<IDevice>) => {
-         state.device = action.payload;
-      },
-      setRate: (state, action: PayloadAction<number>) => {
-         state.device.rating = action.payload;
-      },
-   },
+   reducers: {},
    extraReducers: (builder) => {
       builder
          .addCase(getOneDevice.pending, (state) => {
@@ -55,10 +49,12 @@ export const deviceSlice = createSlice({
                price: 0,
                rating: 0,
             };
-         });
+         }).addCase(makeReview.fulfilled, (state, { payload: rate }) => {
+            state.device.rating = rate;
+         }).addCase(makeReview.rejected, (state, { payload: errorMsg }) => {
+            state.rateError = errorMsg as string;
+         })
    },
 });
-
-export const { setRate } = deviceSlice.actions;
 
 export default deviceSlice.reducer;

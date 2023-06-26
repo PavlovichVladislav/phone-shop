@@ -42,3 +42,5 @@ export interface IComment {
    userId: number;
    deviceId: number;
 }
+
+export type CreateReviewRes = IRate & { deviceRate: number };

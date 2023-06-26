@@ -3,25 +3,24 @@ import { useParams } from "react-router-dom";
 import { Button, Card, Col, Container, Image, Row, Spinner } from "react-bootstrap";
 import clsx from "clsx";
 
-import { CreateReview } from "../../components/modals/CreateReview";
-import { createReview } from "../../http/reviewApi";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { getOneDevice, makeReview } from "../../redux/slices/device/deviceThunks";
+import { getComments } from "../../redux/slices/comments/commentThunks";
+
 import { RateToolbar } from "../../components/RateToolbar";
 import { DeviceComments } from "../../components/DeviceComments";
 import { DeviceChar } from "../../components/DeviceChar";
 import { RateInfo } from "../../components/RateInfo/RateInfo";
-import { setRate } from "../../redux/slices/device/deviceSlice";
-import { getOneDevice } from "../../redux/slices/device/deviceThunks";
+import { CreateReview } from "../../components/modals/CreateReview";
 
 import styles from "./Device.module.css";
-import { getComments } from "../../redux/slices/comments/commentThunks";
 
 export const Device = () => {
    const [reviewVisible, setReviewVisible] = useState(false);
    const dispatch = useAppDispatch();
 
    const { id: deviceId, img, price, info } = useAppSelector((state) => state.device.device);
-   const { isDeviceLoading } = useAppSelector(state => state.device)
+   const { isDeviceLoading } = useAppSelector((state) => state.device);
    const { user } = useAppSelector((state) => state.user);
    const { id } = useParams();
 
@@ -48,12 +47,14 @@ export const Device = () => {
          return;
       }
 
-      createReview(selectedRate, user.id, deviceId)
-         .then(({ deviceRate }) => {
-            dispatch(setRate(deviceRate));
-            alert("Спасибо за ваш отзыв!");
+      dispatch(
+         makeReview({
+            rate: selectedRate,
+            userId: user.id,
+            deviceId,
+            afterSend: () => alert("Спасибо за ваш отзыв!"),
          })
-         .catch(() => alert("ошибка"));
+      );
    };
 
    if (isDeviceLoading) return <Spinner />;

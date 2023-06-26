@@ -1,26 +1,28 @@
 import { $authHost } from ".";
-import { IComment, IRate } from "../models/AppModels";
-
-type CreateReviewRes = IRate & { deviceRate: number };
+import { CreateReviewRes, IComment } from "../models/AppModels";
 
 export const createReview = async (
    rate: number,
    userId: number,
    deviceId: number
-): Promise<CreateReviewRes> => {
-   const { data } = await $authHost.post<CreateReviewRes>("api/review/rate", {
-      rate,
-      userId,
-      deviceId,
-   });
+): Promise<CreateReviewRes | null> => {
+   try {
+      const { data } = await $authHost.post<CreateReviewRes>("api/review/rate", {
+         rate,
+         userId,
+         deviceId,
+      });
 
-   return {
-      id: data.id,
-      rate: data.rate,
-      deviceId: data.deviceId,
-      userId: data.userId,
-      deviceRate: data.deviceRate,
-   };
+      return {
+         id: data.id,
+         rate: data.rate,
+         deviceId: data.deviceId,
+         userId: data.userId,
+         deviceRate: data.deviceRate,
+      };
+   } catch (error) {
+      return null;
+   }
 };
 
 export const createComment = async (
