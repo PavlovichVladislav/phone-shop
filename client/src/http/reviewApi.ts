@@ -1,7 +1,7 @@
 import { $authHost } from ".";
 import { IComment, IRate } from "../models/AppModels";
 
-type CreateReviewRes = IRate & { deviceRate: number }
+type CreateReviewRes = IRate & { deviceRate: number };
 
 export const createReview = async (
    rate: number,
@@ -42,10 +42,14 @@ export const createComment = async (
    };
 };
 
-export const fetchComments = async (deviceId: number): Promise<IComment[]> => {
-   const { data } = await $authHost.get<{ comments: IComment[]; count: number }>(
-      `api/review/comment/${deviceId}`
-   );
+export const fetchComments = async (deviceId: number): Promise<IComment[] | null> => {
+   try {
+      const { data } = await $authHost.get<{ comments: IComment[]; count: number }>(
+         `api/review/comment/${deviceId}`
+      );
 
-   return data.comments;
+      return data.comments;
+   } catch (error) {
+      return null;
+   }
 };

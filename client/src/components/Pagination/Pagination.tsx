@@ -20,8 +20,6 @@ export const Paging: React.FC<Props> = ({ count, itemsInPage }) => {
       });
    };
 
-   console.log(count);
-
    if (pages <= 1) return null;
 
    const selectionVisiblePages = (curPage: number, pagesCount: number, siblingCount: number) => {

@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { ModalWrapper } from "../ModalWrapper";
 import { Form } from "react-bootstrap";
 
-import { createComment, fetchComments } from "../../../http/reviewApi";
+import { createComment } from "../../../http/reviewApi";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
-import { setComments } from "../../../redux/slices/deviceSlice";
+import { getComments } from "../../../redux/slices/comments/commentThunks";
 
 interface Props {
    onClose: () => void;
@@ -30,7 +30,7 @@ export const CreateReview: React.FC<Props> = ({ isShow, onClose, deviceId }) => 
 
       createComment(feedBack, user.id, deviceId)
          .then(() => {
-            fetchComments(deviceId).then((comments) => dispatch(setComments(comments)));
+            dispatch(getComments(deviceId));
             onClose();
          })
          .catch(() => {

@@ -1,32 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Container, Image, ListGroup, Row, Spinner } from "react-bootstrap";
-
-import styles from "./Device.module.css";
-import clsx from "clsx";
-import { IComment, IDevice } from "../../models/AppModels";
-import { fetchOneDevice } from "../../http/deviceApi";
 import { useParams } from "react-router-dom";
+import { Button, Card, Col, Container, Image, Row, Spinner } from "react-bootstrap";
+import clsx from "clsx";
+
 import { CreateReview } from "../../components/modals/CreateReview";
-import { createReview, fetchComments } from "../../http/reviewApi";
+import { createReview } from "../../http/reviewApi";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { RateToolbar } from "../../components/RateToolbar";
 import { DeviceComments } from "../../components/DeviceComments";
 import { DeviceChar } from "../../components/DeviceChar";
 import { RateInfo } from "../../components/RateInfo/RateInfo";
-import { setComments, setDevice, setRate } from "../../redux/slices/deviceSlice";
+import { setRate } from "../../redux/slices/device/deviceSlice";
+import { getOneDevice } from "../../redux/slices/device/deviceThunks";
+
+import styles from "./Device.module.css";
+import { getComments } from "../../redux/slices/comments/commentThunks";
 
 export const Device = () => {
    const [reviewVisible, setReviewVisible] = useState(false);
    const dispatch = useAppDispatch();
 
    const { id: deviceId, img, price, info } = useAppSelector((state) => state.device.device);
+   const { isDeviceLoading } = useAppSelector(state => state.device)
    const { user } = useAppSelector((state) => state.user);
    const { id } = useParams();
 
    useEffect(() => {
       if (id) {
-         fetchOneDevice(+id).then((device) => dispatch(setDevice(device)));
-         fetchComments(+id).then((comments) => dispatch(setComments(comments)));
+         dispatch(getOneDevice(+id));
+         dispatch(getComments(+id));
       }
    }, []);
 
@@ -54,7 +56,7 @@ export const Device = () => {
          .catch(() => alert("ошибка"));
    };
 
-   if (!deviceId) return <Spinner />;
+   if (isDeviceLoading) return <Spinner />;
 
    return (
       <Container className="mt-5">

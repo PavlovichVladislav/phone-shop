@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 import type { PayloadAction } from "@reduxjs/toolkit";
+
 import { IBasketDevice } from "../../models/AppModels";
-import { count } from "console";
 
 export type BasketState = {
    devices: IBasketDevice[];

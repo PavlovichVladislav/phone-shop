@@ -1,9 +1,12 @@
 import React from "react";
 import { ListGroup } from "react-bootstrap";
 import { useAppSelector } from "../../hooks/reduxHooks";
+import { Loader } from "../Loader";
 
 export const DeviceComments: React.FC = () => {
-   const { comments } = useAppSelector(state => state.device)
+   const { comments, isCommentsLoading } = useAppSelector((state) => state.comments);
+
+   if (isCommentsLoading) return <Loader />;
 
    return (
       <ListGroup>

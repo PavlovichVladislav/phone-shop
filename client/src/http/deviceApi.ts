@@ -88,8 +88,12 @@ export const fetchDevices = async (
    return data;
 };
 
-export const fetchOneDevice = async (id: number): Promise<IDevice> => {
-   const { data } = await $host.get<IDevice>(`api/device/${id}`);
+export const fetchOneDevice = async (id: number): Promise<IDevice | null> => {
+   try {
+      const { data } = await $host.get<IDevice>(`api/device/${id}`);
 
-   return data;
+      return data;
+   } catch (error) {
+      return null;
+   }
 };
