@@ -17,16 +17,23 @@ export const getBasketDevices = async (userId: number): Promise<IGetBasketRes | 
    }
 };
 
-export const addBasketDevice = async (userId: number, deviceId: number): Promise<IAddBaksetRes> => {
-   const { data } = await $authHost.post<IAddBaksetRes>(`api/basket/`, { userId, deviceId });
+export const postBasketDevice = async (
+   userId: number,
+   deviceId: number
+): Promise<IAddBaksetRes | null> => {
+   try {
+      const { data } = await $authHost.post<IAddBaksetRes>(`api/basket/`, { userId, deviceId });
 
-   const { basketId, id } = data;
+      const { basketId, id } = data;
 
-   return {
-      basketId,
-      deviceId,
-      id,
-   };
+      return {
+         basketId,
+         deviceId,
+         id,
+      };
+   } catch (error) {
+      return null;
+   }
 };
 
 export const delBasketDevice = async (baskedDeviceId: number) => {

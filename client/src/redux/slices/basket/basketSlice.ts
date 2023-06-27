@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-import { IBasketDevice } from "../../../models/AppModels";
+import { IBasketDevice, IDevice } from "../../../models/AppModels";
 import {
    decBasketDeviceThunk,
    fetchBasketDevices,
@@ -27,11 +27,30 @@ export const basketSlice = createSlice({
    name: "basket",
    initialState,
    reducers: {
-      setBasketDevices: (state, action: PayloadAction<IBasketDevice[]>) => {
-         state.devices = action.payload;
+      addBasketDevice: (
+         state,
+         { payload }: PayloadAction<IDevice & { basketDeviceId: number }>
+      ) => {
+         const index = state.devices.findIndex(
+            (device) => device.basketDeviceId === payload.basketDeviceId
+         );
+
+         if (index !== -1) {
+            state.devices[index].count++;
+            state.count++;
+         } else {
+            state.devices.push({ ...payload, count: 1 });
+            state.count++;
+         }
       },
       deleteBasketDevice: (state, action: PayloadAction<number>) => {
          state.devices = state.devices.filter((device) => device.basketDeviceId !== action.payload);
+
+         let totalCount = 0;
+
+         state.devices.forEach((device) => (totalCount += device.count));
+
+         state.count = totalCount;
       },
       incrBasketDevice: (state, action: PayloadAction<number>) => {
          state.devices = state.devices.map((device) =>
@@ -39,6 +58,7 @@ export const basketSlice = createSlice({
                ? { ...device, count: device.count + 1 }
                : device
          );
+         state.count++;
       },
       decrBasketDevice: (state, action: PayloadAction<number>) => {
          state.devices = state.devices.map((device) =>
@@ -46,6 +66,7 @@ export const basketSlice = createSlice({
                ? { ...device, count: device.count - 1 }
                : device
          );
+         state.count--;
       },
    },
    extraReducers: (builder) => {
@@ -56,7 +77,12 @@ export const basketSlice = createSlice({
          .addCase(fetchBasketDevices.fulfilled, (state, { payload }) => {
             state.isDevicesLoading = false;
             state.devices = payload.devices;
-            state.count = payload.count;
+
+            let totalCount = 0;
+
+            payload.devices.forEach((device) => (totalCount += device.count));
+
+            state.count = totalCount;
             state.error = "";
          })
          .addCase(fetchBasketDevices.rejected, (state, { payload: errorMsg }) => {
@@ -77,7 +103,7 @@ export const basketSlice = createSlice({
    },
 });
 
-export const { setBasketDevices, deleteBasketDevice, incrBasketDevice, decrBasketDevice } =
+export const { deleteBasketDevice, incrBasketDevice, decrBasketDevice, addBasketDevice } =
    basketSlice.actions;
 
 export default basketSlice.reducer;

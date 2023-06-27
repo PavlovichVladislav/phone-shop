@@ -1,12 +1,18 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { IGetBasketRes } from "../../../models/AppModels";
+import { IDevice, IGetBasketRes } from "../../../models/AppModels";
 import {
    decBasketDevice,
    delBasketDevice,
    getBasketDevices,
    incBasketDevice,
+   postBasketDevice,
 } from "../../../http/basketApi";
-import { decrBasketDevice, deleteBasketDevice, incrBasketDevice } from "./basketSlice";
+import {
+   addBasketDevice,
+   decrBasketDevice,
+   deleteBasketDevice,
+   incrBasketDevice,
+} from "./basketSlice";
 
 export const fetchBasketDevices = createAsyncThunk<IGetBasketRes, number>(
    "basket/fetchDevices",
@@ -23,13 +29,30 @@ interface changeBasketArgs {
    basketDeviceId: number;
 }
 
+interface addBasketArgs {
+   userId: number;
+   deviceId: number;
+   device: IDevice;
+}
+
+export const addBasketDeviceThunk = createAsyncThunk<void, addBasketArgs>(
+   "basket/addBasketDevice",
+   async ({ deviceId, userId, device }, { rejectWithValue, dispatch }) => {
+      const response = await postBasketDevice(userId, deviceId);
+
+      if (!response) return rejectWithValue("Не удалось добавить устройство в корзину");
+
+      dispatch(addBasketDevice({ basketDeviceId: response.id, ...device }));
+   }
+);
+
 export const removeBasketDevice = createAsyncThunk<void, changeBasketArgs>(
    "basket/deleteBasketDevice",
    async ({ basketDeviceId }, { rejectWithValue, dispatch }) => {
       const response = await delBasketDevice(basketDeviceId);
 
       if (response) return rejectWithValue(response);
-      
+
       dispatch(deleteBasketDevice(basketDeviceId));
    }
 );

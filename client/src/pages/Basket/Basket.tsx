@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Navigate } from "react-router-dom";
 
-import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { fetchBasketDevices } from "../../redux/slices/basket/basketThunks";
+import { useAppSelector } from "../../hooks/reduxHooks";
 
 import { Container } from "react-bootstrap";
 import { BasketCard } from "../../components/BasketCard";
@@ -11,15 +10,6 @@ import { Loader } from "../../components/Loader";
 export const Basket = () => {
    const { devices, isDevicesLoading } = useAppSelector((state) => state.basket);
    const { user } = useAppSelector((state) => state.user);
-   const dispatch = useAppDispatch();
-
-   useEffect(() => {
-      if (user) {
-         dispatch(fetchBasketDevices(user.id));
-         return;
-      }
-      //eslint-disable-next-line
-   }, []);
 
    if (!user) {
       alert("Необходимо авторизоваться");

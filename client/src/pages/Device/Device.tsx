@@ -15,15 +15,18 @@ import { CreateReview } from "../../components/modals/CreateReview";
 import { Loader } from "../../components/Loader";
 
 import styles from "./Device.module.css";
+import { addBasketDeviceThunk } from "../../redux/slices/basket/basketThunks";
 
 export const Device = () => {
    const [reviewVisible, setReviewVisible] = useState(false);
    const dispatch = useAppDispatch();
 
-   const { id: deviceId, img, price, info } = useAppSelector((state) => state.device.device);
+   const { device } = useAppSelector((state) => state.device);
    const { isDeviceLoading } = useAppSelector((state) => state.device);
    const { user } = useAppSelector((state) => state.user);
    const { id } = useParams();
+
+   const { id: deviceId, img, info, price } = device;
 
    useEffect(() => {
       if (id) {
@@ -59,6 +62,14 @@ export const Device = () => {
       );
    };
 
+   const onAddBasket = () => {
+      if (user) {
+         dispatch(addBasketDeviceThunk({ device, userId: user.id, deviceId }))
+      } else {
+         alert("Необходимо авторизоваться");
+      }
+   };
+
    if (isDeviceLoading) return <Loader />;
 
    return (
@@ -84,7 +95,7 @@ export const Device = () => {
                >
                   <h3>Цена: {price} руб.</h3>
                   <RateToolbar onSelectItem={sendReview} />
-                  <Button variant="warning">Добавить в корзину</Button>
+                  <Button variant="warning" onClick={onAddBasket}>Добавить в корзину</Button>
                   <Button variant="warning" onClick={() => setReviewVisible(true)}>
                      Оставить отзыв
                   </Button>

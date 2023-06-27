@@ -15,6 +15,7 @@ import styles from "./NavBar.module.css";
 
 export const NavBar = () => {
    const { _isAuth } = useAppSelector((state) => state.user);
+   const { count } = useAppSelector(state => state.basket);
    const navigate = useNavigate();
    const dispatch = useAppDispatch();
 
@@ -42,7 +43,7 @@ export const NavBar = () => {
                   {_isAuth ? (
                      <>
                         <Button variant={"outline-light"} onClick={() => navigate(BASKET_ROUTE)}>
-                           Корзина
+                           Корзина: {count}
                         </Button>
                         <Button className="ms-2" variant={"outline-light"} onClick={() => navigate(ADMIN_ROUTE)}>
                            Панель администратора

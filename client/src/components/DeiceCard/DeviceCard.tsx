@@ -7,8 +7,8 @@ import { IDevice } from "../../models/AppModels";
 
 import styles from "./DeviceCard.module.css";
 import star from "../../assets/star.png";
-import { addBasketDevice } from "../../http/basketApi";
-import { useAppSelector } from "../../hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { addBasketDeviceThunk } from "../../redux/slices/basket/basketThunks";
 
 interface Props {
    device: IDevice;
@@ -17,10 +17,11 @@ interface Props {
 export const DeviceCard: React.FC<Props> = ({ device }) => {
    const { id, img, name, price, rating } = device;
    const { user } = useAppSelector((state) => state.user);
+   const dispatch = useAppDispatch();
 
    const onAddBasket = () => {
       if (user) {
-         addBasketDevice(user.id, id);
+         dispatch(addBasketDeviceThunk({ userId: user.id, device, deviceId: id }))
       } else {
          alert("Необходимо авторизоваться");
       }
