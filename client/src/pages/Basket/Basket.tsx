@@ -1,26 +1,33 @@
 import React, { useEffect } from "react";
-import { getBasketDevices } from "../../http/basketApi";
+import { Navigate } from "react-router-dom";
+
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
-import { useNavigate } from "react-router-dom";
+import { fetchBasketDevices } from "../../redux/slices/basket/basketThunks";
+
 import { Container } from "react-bootstrap";
 import { BasketCard } from "../../components/BasketCard";
-import { setBasketDevices } from "../../redux/slices/basketSlice";
+import { Loader } from "../../components/Loader";
 
 export const Basket = () => {
-   const { devices } = useAppSelector(state => state.basket)
+   const { devices, isDevicesLoading } = useAppSelector((state) => state.basket);
    const { user } = useAppSelector((state) => state.user);
-   const navigate = useNavigate();
    const dispatch = useAppDispatch();
 
    useEffect(() => {
       if (user) {
-         getBasketDevices(user.id).then(({ devices }) => dispatch(setBasketDevices(devices)));
+         dispatch(fetchBasketDevices(user.id));
          return;
       }
-
-      alert("Необходимо авторизоваться");
-      navigate("/");
+      //eslint-disable-next-line
    }, []);
+
+   if (!user) {
+      alert("Необходимо авторизоваться");
+
+      return <Navigate to="/" />;
+   }
+
+   if (isDevicesLoading) return <Loader />;
 
    return (
       <Container className="mt-3">

@@ -31,7 +31,7 @@ export const TypeBar = () => {
 
    return (
       <ListGroup>
-         {types.map((type, i) => (
+         {types.map((type) => (
             <ListGroup.Item
                key={type.id}
                active={currentType === type.query}

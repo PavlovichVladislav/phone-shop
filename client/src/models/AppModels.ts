@@ -56,3 +56,8 @@ export interface fetchDevicesRes {
    count: number;
    devices: IDevice[];
 }
+
+export interface IGetBasketRes {
+   count: number;
+   devices: IBasketDevice[];
+}

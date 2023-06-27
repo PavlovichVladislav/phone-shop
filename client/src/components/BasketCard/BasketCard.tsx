@@ -1,16 +1,17 @@
 import React from "react";
+import { Button, Card, Form } from "react-bootstrap";
+import clsx from "clsx";
+
+import { useAppDispatch } from "../../hooks/reduxHooks";
+import {
+   decBasketDeviceThunk,
+   incBasketDeviceThunk,
+   removeBasketDevice,
+} from "../../redux/slices/basket/basketThunks";
+
 import { IBasketDevice } from "../../models/AppModels";
-import { Button, Card, Form, Row } from "react-bootstrap";
 
 import styles from "./BasketCard.module.css";
-import clsx from "clsx";
-import { decBasketDevice, deleteBasketDevice, incBasketDevice } from "../../http/basketApi";
-import {
-   decrBasketDevice,
-   incrBasketDevice,
-   removeBasketDevice,
-} from "../../redux/slices/basketSlice";
-import { useAppDispatch } from "../../hooks/reduxHooks";
 
 interface Props {
    device: IBasketDevice;
@@ -21,24 +22,21 @@ export const BasketCard: React.FC<Props> = ({ device }) => {
    const dispatch = useAppDispatch();
 
    const onDeleteDevice = () => {
-      dispatch(removeBasketDevice(basketDeviceId));
-      deleteBasketDevice(basketDeviceId);
+      dispatch(removeBasketDevice({ basketDeviceId }));
    };
 
    const onIncDevice = () => {
-      dispatch(incrBasketDevice(basketDeviceId));
-      incBasketDevice(basketDeviceId);
+      dispatch(incBasketDeviceThunk({ basketDeviceId }));
    };
 
    const onDecDevice = () => {
-      dispatch(decrBasketDevice(basketDeviceId));
-      decBasketDevice(basketDeviceId);
+      dispatch(decBasketDeviceThunk({ basketDeviceId }));
    };
 
    return (
       <Card className="mt-3">
          <Card.Body className={clsx("d-flex flex-row justify-content-between", styles.card)}>
-            <Form className={clsx('d-flex flex-row align-items-center cardRight', styles.cardLeft)}>
+            <Form className={clsx("d-flex flex-row align-items-center cardRight", styles.cardLeft)}>
                <Card.Img
                   variant="top"
                   className={styles.img}
@@ -47,7 +45,9 @@ export const BasketCard: React.FC<Props> = ({ device }) => {
                <Card.Title className={styles.title}>{name}</Card.Title>
                <Card.Subtitle>{price * count} ₽</Card.Subtitle>
             </Form>
-            <Form className={clsx('d-flex flex-row align-items-center cardRight', styles.cardRight)}>
+            <Form
+               className={clsx("d-flex flex-row align-items-center cardRight", styles.cardRight)}
+            >
                <div>Количество: {count}</div>
                <Button variant="warning" onClick={onIncDevice}>
                   +

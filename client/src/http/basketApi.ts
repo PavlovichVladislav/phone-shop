@@ -1,10 +1,5 @@
 import { $authHost } from ".";
-import { IBasketDevice } from "../models/AppModels";
-
-interface IGetBasketRes {
-   count: number;
-   devices: IBasketDevice[];
-}
+import { IBasketDevice, IGetBasketRes } from "../models/AppModels";
 
 interface IAddBaksetRes {
    id: number;
@@ -12,10 +7,14 @@ interface IAddBaksetRes {
    deviceId: number;
 }
 
-export const getBasketDevices = async (userId: number): Promise<IGetBasketRes> => {
-   const { data } = await $authHost.get<IGetBasketRes>(`api/basket/${userId}`);
+export const getBasketDevices = async (userId: number): Promise<IGetBasketRes | null> => {
+   try {
+      const { data } = await $authHost.get<IGetBasketRes>(`api/basket/${userId}`);
 
-   return data;
+      return data;
+   } catch (error) {
+      return null;
+   }
 };
 
 export const addBasketDevice = async (userId: number, deviceId: number): Promise<IAddBaksetRes> => {
@@ -30,18 +29,26 @@ export const addBasketDevice = async (userId: number, deviceId: number): Promise
    };
 };
 
-export const deleteBasketDevice = async (baskedDeviceId: number) => {
-   const { data } = await $authHost.delete<IAddBaksetRes>(`api/basket/${baskedDeviceId}`);
+export const delBasketDevice = async (baskedDeviceId: number) => {
+   try {
+      const { data } = await $authHost.delete<IAddBaksetRes>(`api/basket/${baskedDeviceId}`);
+   } catch (error) {
+      return "Не удалось удалить устройство";
+   }
 };
 
 export const incBasketDevice = async (baskedDeviceId: number) => {
-   const { data } = await $authHost.post<IBasketDevice>(`api/basket/inc/${baskedDeviceId}`);
-
-   return data;
+   try {
+      const { data } = await $authHost.post<IBasketDevice>(`api/basket/inc/${baskedDeviceId}`);
+   } catch (error) {
+      return "Не удалось увеличить кол-во устройства в корзине";
+   }
 };
 
 export const decBasketDevice = async (baskedDeviceId: number) => {
-   const { data } = await $authHost.post<IBasketDevice | {}>(`api/basket/dec/${baskedDeviceId}`);
-
-   return data;
+   try {
+      const { data } = await $authHost.post<IBasketDevice | {}>(`api/basket/dec/${baskedDeviceId}`);
+   } catch (error) {
+      return "Не удалось уменьшить кол-во устройства в корзине";
+   }
 };

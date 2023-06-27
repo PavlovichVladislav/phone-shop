@@ -1,6 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createComment, fetchComments } from "../../../http/reviewApi";
 
+interface createCommentArgs { 
+   comment: string;
+   userId: number;
+   deviceId: number;
+   afterSend: () => void;
+}
+
 export const getComments = createAsyncThunk(
    "comments/getComments",
    async (deviceId: number, { rejectWithValue }) => {
@@ -11,13 +18,6 @@ export const getComments = createAsyncThunk(
       return response;
    }
 );
-
-interface createCommentArgs { 
-   comment: string;
-   userId: number;
-   deviceId: number;
-   afterSend: () => void;
-}
 
 export const sendComment = createAsyncThunk<void, createCommentArgs>(
    "comments/sendComment",
