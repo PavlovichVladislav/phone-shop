@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { IComment } from "../../../models/AppModels";
-import { getComments } from "./commentThunks";
+import { getComments, sendComment } from "./commentThunks";
 
 export type DeviceState = {
    comments: IComment[];
@@ -32,6 +32,9 @@ export const deviceSlice = createSlice({
          .addCase(getComments.rejected, (state, { payload: errorMsg }) => {
             state.isCommentsLoading = false;
             state.comments = [];
+            state.commentsError = errorMsg as string;
+         })
+         .addCase(sendComment.rejected, (state, { payload: errorMsg }) => {
             state.commentsError = errorMsg as string;
          });
    },

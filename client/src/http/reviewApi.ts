@@ -29,19 +29,23 @@ export const createComment = async (
    comment: string,
    userId: number,
    deviceId: number
-): Promise<IComment> => {
-   const { data } = await $authHost.post<IComment>("api/review/comment", {
-      comment,
-      userId,
-      deviceId,
-   });
-
-   return {
-      id: data.id,
-      comment: data.comment,
-      deviceId: data.deviceId,
-      userId: data.userId,
-   };
+): Promise<IComment | null> => {
+   try {
+      const { data } = await $authHost.post<IComment>("api/review/comment", {
+         comment,
+         userId,
+         deviceId,
+      });
+   
+      return {
+         id: data.id,
+         comment: data.comment,
+         deviceId: data.deviceId,
+         userId: data.userId,
+      };
+   } catch (error) {
+      return null;
+   }
 };
 
 export const fetchComments = async (deviceId: number): Promise<IComment[] | null> => {

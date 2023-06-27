@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { ModalWrapper } from "../ModalWrapper";
 import { Form } from "react-bootstrap";
 
-import { createComment } from "../../../http/reviewApi";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
-import { getComments } from "../../../redux/slices/comments/commentThunks";
+import { sendComment } from "../../../redux/slices/comments/commentThunks";
 
 interface Props {
    onClose: () => void;
@@ -17,7 +16,7 @@ export const CreateReview: React.FC<Props> = ({ isShow, onClose, deviceId }) => 
    const { user } = useAppSelector((state) => state.user);
    const dispatch = useAppDispatch();
 
-   const sendComment = () => {
+   const onSendComment = () => {
       if (!user) {
          alert("Не удалось получить информацию о пользователе, попробуйте авторизоваться снова");
          return;
@@ -28,19 +27,17 @@ export const CreateReview: React.FC<Props> = ({ isShow, onClose, deviceId }) => 
          return;
       }
 
-      createComment(feedBack, user.id, deviceId)
-         .then(() => {
-            dispatch(getComments(deviceId));
-            onClose();
+      dispatch(
+         sendComment({
+            comment: feedBack,
+            userId: user.id,
+            deviceId,
+            afterSend: () => {
+               setFeedback("");
+               onClose();
+            },
          })
-         .catch(() => {
-            alert(() => {
-               "Произошла ошибка";
-            });
-         })
-         .finally(() => {
-            setFeedback("");
-         });
+      );
    };
 
    return (
@@ -48,7 +45,7 @@ export const CreateReview: React.FC<Props> = ({ isShow, onClose, deviceId }) => 
          isShow={isShow}
          onClose={onClose}
          title="Создание отзыва"
-         onSubmit={sendComment}
+         onSubmit={onSendComment}
       >
          <Form>
             <Form.Control

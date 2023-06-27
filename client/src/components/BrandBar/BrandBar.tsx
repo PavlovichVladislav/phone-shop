@@ -11,10 +11,10 @@ import { Card, Form } from "react-bootstrap";
 import { ICategory } from "../../models/AppModels";
 
 import styles from "./Brand.module.css";
-
+import { Loader } from "../Loader";
 
 export const BrandBar = () => {
-   const { brands } = useAppSelector((store) => store.shop);
+   const { brands, isBrandsLoading } = useAppSelector((store) => store.shop);
    const [searchParams, setSearchParams] = useSearchParams();
    const dispatch = useAppDispatch();
    const currentBrand = searchParams.get("brand");
@@ -30,6 +30,8 @@ export const BrandBar = () => {
       dispatch(getBrands());
       // eslint-disable-next-line
    }, []);
+
+   if (isBrandsLoading) return <Loader />;
 
    return (
       <Form className="d-flex flex-wrap gap-2 ps-3">
