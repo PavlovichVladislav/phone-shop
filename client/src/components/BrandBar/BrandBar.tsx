@@ -14,7 +14,7 @@ import styles from "./Brand.module.css";
 import { Loader } from "../Loader";
 
 export const BrandBar = () => {
-   const { brands, isBrandsLoading } = useAppSelector((store) => store.shop);
+   const { brands, isBrandsLoading, brandsError } = useAppSelector((store) => store.shop);
    const [searchParams, setSearchParams] = useSearchParams();
    const dispatch = useAppDispatch();
    const currentBrand = searchParams.get("brand");
@@ -32,6 +32,10 @@ export const BrandBar = () => {
    }, []);
 
    if (isBrandsLoading) return <Loader />;
+
+   if (brandsError) return <div>{brandsError}</div>;
+
+   if (!brands.length) return <div>Список брендов пуст</div>;
 
    return (
       <Form className="d-flex flex-wrap gap-2 ps-3">

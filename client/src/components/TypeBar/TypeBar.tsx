@@ -8,7 +8,7 @@ import { getTypes } from "../../redux/slices/shop/shopThunks";
 import { Loader } from "../Loader";
 
 export const TypeBar = () => {
-   const { types, isTypesLoading } = useAppSelector((store) => store.shop);
+   const { types, isTypesLoading, typesError } = useAppSelector((store) => store.shop);
    const [searchParams, setSearchParams] = useSearchParams();
 
    const dispatch = useAppDispatch();
@@ -28,6 +28,10 @@ export const TypeBar = () => {
    }, []);
 
    if (isTypesLoading) return <Loader />;
+
+   if (typesError) return <div>{typesError}</div>;
+
+   if (!types.length) return <div>Список типов пуст</div>;
 
    return (
       <ListGroup>

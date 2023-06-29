@@ -17,13 +17,13 @@ export const createType = async (name: string, query: string): Promise<ICategory
    };
 };
 
-export const fetchTypes = async (): Promise<ICategory[] | null> => {
+export const fetchTypes = async (): Promise<ICategory[]> => {
    try {
       const { data } = await $host.get<ICategory[]>("api/type");
 
       return data;
    } catch (error) {
-      return null;
+      throw new Error("Не удалось получить типы устройств");
    }
 };
 
@@ -37,13 +37,13 @@ export const createBrand = async (name: string, query: string): Promise<ICategor
    };
 };
 
-export const fetchBrands = async (): Promise<ICategory[] | null> => {
+export const fetchBrands = async (): Promise<ICategory[]> => {
    try {
       const { data } = await $host.get<ICategory[]>("api/brand");
 
       return data;
    } catch (error) {
-      return null;
+      throw new Error("Не удалось получить бренды");
    }
 };
 
@@ -89,7 +89,7 @@ export const fetchDevices = async ({
    limit,
    page,
    typeId,
-}: fetchDevicesArgs): Promise<fetchDevicesRes | null> => {
+}: fetchDevicesArgs): Promise<fetchDevicesRes> => {
    try {
       const { data } = await $host.get<fetchDevicesRes>("api/device", {
          params: { brandId, typeId, limit, page },
@@ -97,7 +97,7 @@ export const fetchDevices = async ({
 
       return data;
    } catch (error) {
-      return null;
+      throw new Error("Не удалось получить устройства");
    }
 };
 

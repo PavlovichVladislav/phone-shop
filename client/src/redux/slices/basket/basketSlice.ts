@@ -45,12 +45,7 @@ export const basketSlice = createSlice({
       },
       deleteBasketDevice: (state, action: PayloadAction<number>) => {
          state.devices = state.devices.filter((device) => device.basketDeviceId !== action.payload);
-
-         let totalCount = 0;
-
-         state.devices.forEach((device) => (totalCount += device.count));
-
-         state.count = totalCount;
+         state.count = state.devices.reduce((totalCount, { count }) => totalCount + count, 0);
       },
       incrBasketDevice: (state, action: PayloadAction<number>) => {
          state.devices = state.devices.map((device) =>
@@ -77,12 +72,7 @@ export const basketSlice = createSlice({
          .addCase(fetchBasketDevices.fulfilled, (state, { payload }) => {
             state.isDevicesLoading = false;
             state.devices = payload.devices;
-
-            let totalCount = 0;
-
-            payload.devices.forEach((device) => (totalCount += device.count));
-
-            state.count = totalCount;
+            state.count = payload.devices.reduce((totalCount, { count }) => totalCount + count, 0);
             state.error = "";
          })
          .addCase(fetchBasketDevices.rejected, (state, { payload: errorMsg }) => {

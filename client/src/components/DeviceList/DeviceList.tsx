@@ -11,7 +11,7 @@ import { getDevices } from "../../redux/slices/shop/shopThunks";
 import { Loader } from "../Loader";
 
 export const DeviceList = () => {
-   const { devices, curBrandId, curTypeId, isDevicesLoading } = useAppSelector(
+   const { devices, curBrandId, curTypeId, isDevicesLoading, deviceError } = useAppSelector(
       (state) => state.shop
    );
    const [searchParams] = useSearchParams();
@@ -26,6 +26,12 @@ export const DeviceList = () => {
    }, [page, curBrandId, curTypeId]);
 
    if (isDevicesLoading) return <Loader />;
+
+   if (deviceError) return <div>{deviceError}</div>;
+
+   if (!devices.length) {
+      return <div>Список устройств пуст</div>;
+   }
 
    return (
       <Row className="d-flex p-3">

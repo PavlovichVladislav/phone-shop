@@ -31,7 +31,7 @@ const initialState: ShopState = {
    isBrandsLoading: true,
    deviceError: "",
    typesError: "",
-   brandsError: ""
+   brandsError: "",
 };
 
 export const shopSlice = createSlice({
@@ -83,12 +83,12 @@ export const shopSlice = createSlice({
          .addCase(getBrands.fulfilled, (state, { payload: brands }) => {
             state.isBrandsLoading = false;
             state.brands = brands;
-            state.typesError = "";
+            state.brandsError = "";
          })
          .addCase(getBrands.rejected, (state, { payload: brandsErrorMsg }) => {
             state.isBrandsLoading = false;
             state.brands = [];
-            state.typesError = brandsErrorMsg as string;
+            state.brandsError = brandsErrorMsg as string;
          });
    },
 });

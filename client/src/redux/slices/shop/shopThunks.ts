@@ -5,27 +5,38 @@ import { fetchDevicesArgs, fetchDevicesRes } from "../../../models/AppModels";
 export const getDevices = createAsyncThunk<fetchDevicesRes, fetchDevicesArgs>(
    "shop/getDevices",
    async (args, { rejectWithValue }) => {
-      const response = await fetchDevices({...args});
+      try {
+         const response = await fetchDevices({ ...args });
 
-      if (!response) return rejectWithValue('Не удалось получить устройства');
+         return response;
+      } catch (error) {
+         const err = error as Error;
 
-      return response;
+         return rejectWithValue(err.message);
+      }
    }
 );
 
 export const getTypes = createAsyncThunk("shop/getTypes", async (_, { rejectWithValue }) => {
-    const response = await fetchTypes();
+   try {
+      const response = await fetchTypes();
 
-    if (!response) return rejectWithValue('Не удалось получить типы устройств');
+      return response;
+   } catch (error) {
+      const err = error as Error;
 
-    return response;
-})
+      return rejectWithValue(err.message);
+   }
+});
 
 export const getBrands = createAsyncThunk("shop/getBrands", async (_, { rejectWithValue }) => {
-    const response = await fetchBrands();
+   try {
+      const response = await fetchBrands();
 
-    if (!response) return rejectWithValue('Не удалось получить бренды устройств');
+      return response;
+   } catch (error) {
+      const err = error as Error;
 
-    return response;
-})
-
+      return rejectWithValue(err.message);
+   }
+});
