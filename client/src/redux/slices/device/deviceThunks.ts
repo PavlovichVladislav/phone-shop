@@ -12,22 +12,30 @@ interface makeReviewArgs {
 export const getOneDevice = createAsyncThunk(
    "device/getOne",
    async (id: number, { rejectWithValue }) => {
-      const response = await fetchOneDevice(id);
+      try {
+         const response = await fetchOneDevice(id);
 
-      if (!response) return rejectWithValue("Не удалось получить устройство");
+         return response;
+      } catch (error) {
+         const err = error as Error;
 
-      return response;
+         return rejectWithValue(err.message);
+      }
    }
 );
 
 export const makeReview = createAsyncThunk<number, makeReviewArgs>(
    "device/makeReview",
    async ({ deviceId, rate, userId, afterSend }, { rejectWithValue }) => {
-      const response = await createReview(rate, userId, deviceId);
+      try {
+         const response = await createReview(rate, userId, deviceId);
+         afterSend();
 
-      if (!response) return rejectWithValue("Не удалось отправить оценку устройства");
+         return response.deviceRate;
+      } catch (error) {
+         const err = error as Error;
 
-      afterSend();
-      return response.deviceRate;
+         return rejectWithValue(err.message);
+      }
    }
 );

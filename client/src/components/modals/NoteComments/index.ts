@@ -1,0 +1,1 @@
+export { NoteComments } from './NoteComments';

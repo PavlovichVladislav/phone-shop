@@ -7,6 +7,7 @@ export type DeviceState = {
    device: IDevice;
    isDeviceLoading: boolean;
    deviceError: string;
+   isSendRateLoading: boolean;
    rateError: string;
 };
 
@@ -20,8 +21,9 @@ const initialState: DeviceState = {
       rating: 0,
    },
    isDeviceLoading: false,
+   isSendRateLoading: false,
    deviceError: "",
-   rateError: ""
+   rateError: "",
 };
 
 export const deviceSlice = createSlice({
@@ -49,11 +51,19 @@ export const deviceSlice = createSlice({
                price: 0,
                rating: 0,
             };
-         }).addCase(makeReview.fulfilled, (state, { payload: rate }) => {
-            state.device.rating = rate;
-         }).addCase(makeReview.rejected, (state, { payload: errorMsg }) => {
-            state.rateError = errorMsg as string;
          })
+         .addCase(makeReview.pending, (state) => {
+            state.isSendRateLoading = true;
+         })
+         .addCase(makeReview.fulfilled, (state, { payload: rate }) => {
+            state.device.rating = rate;
+            state.isSendRateLoading = false;
+            state.rateError = "";
+         })
+         .addCase(makeReview.rejected, (state, { payload: errorMsg }) => {
+            state.rateError = errorMsg as string;
+            state.isSendRateLoading = false;
+         });
    },
 });
 

@@ -28,12 +28,11 @@ export const ModalWrapper: React.FC<Props> = ({ onClose, children, isShow, title
             <Button onClick={onClose} variant="warning">
                Закрыть
             </Button>
-            <Button
-               onClick={onSubmit}
-               variant="warning"
-            >
-               Добавить
-            </Button>
+            {onSubmit && (
+               <Button onClick={onSubmit} variant="warning">
+                  Отправить
+               </Button>
+            )}
          </Modal.Footer>
       </Modal>
    );

@@ -101,12 +101,12 @@ export const fetchDevices = async ({
    }
 };
 
-export const fetchOneDevice = async (id: number): Promise<IDevice | null> => {
+export const fetchOneDevice = async (id: number): Promise<IDevice> => {
    try {
       const { data } = await $host.get<IDevice>(`api/device/${id}`);
 
       return data;
    } catch (error) {
-      return null;
+      throw new Error("Не удалось получить устройство");
    }
 };

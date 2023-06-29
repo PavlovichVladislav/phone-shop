@@ -1,7 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createComment, fetchComments } from "../../../http/reviewApi";
+import { setNoteCommentsVisible } from "../modals/modalsSlice";
 
-interface createCommentArgs { 
+interface createCommentArgs {
    comment: string;
    userId: number;
    deviceId: number;
@@ -11,22 +12,45 @@ interface createCommentArgs {
 export const getComments = createAsyncThunk(
    "comments/getComments",
    async (deviceId: number, { rejectWithValue }) => {
-      const response = await fetchComments(deviceId);
+      try {
+         const response = await fetchComments(deviceId);
 
-      if (!response) return rejectWithValue("Не удалось получить комментарии");
+         return response;
+      } catch (error) {
+         const err = error as Error;
 
-      return response;
+         return rejectWithValue(err.message);
+      }
    }
 );
 
 export const sendComment = createAsyncThunk<void, createCommentArgs>(
    "comments/sendComment",
-   async ({comment, deviceId, userId, afterSend}, { rejectWithValue, dispatch }) => {
-      const response = await createComment(comment, userId, deviceId);
+   ({ comment, deviceId, userId, afterSend }, { rejectWithValue, dispatch }) => {
+      // try {
+      //    await createComment(comment, userId, deviceId);
 
-      if (!response) return rejectWithValue("Не удалось отправить комментарий");
+      //    afterSend();
+      //    dispatch(getComments(deviceId));
+      //    dispatch(setNoteCommentsVisible(true));
+      // } catch (error) {
+      //    const err = error as Error;
 
-      afterSend();
-      dispatch(getComments(deviceId));
+      //    dispatch(setNoteCommentsVisible(true));
+      //    return rejectWithValue(err.message);
+      // }
+
+      return createComment(comment, userId, deviceId)
+         .then(() => {
+            dispatch(getComments(deviceId));
+         })
+         .catch((err: Error) => {
+            console.log(err.message);
+            return rejectWithValue(err.message);
+         })
+         .finally(() => {
+            afterSend();
+            dispatch(setNoteCommentsVisible(true));
+         });
    }
 );

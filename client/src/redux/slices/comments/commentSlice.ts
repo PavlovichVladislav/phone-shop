@@ -6,13 +6,17 @@ import { getComments, sendComment } from "./commentThunks";
 export type DeviceState = {
    comments: IComment[];
    isCommentsLoading: boolean;
+   isSendingComment: boolean;
    commentsError: string;
+   sendCommentError: string;
 };
 
 const initialState: DeviceState = {
    comments: [],
    isCommentsLoading: false,
+   isSendingComment: false,
    commentsError: "",
+   sendCommentError: "",
 };
 
 export const deviceSlice = createSlice({
@@ -34,8 +38,16 @@ export const deviceSlice = createSlice({
             state.comments = [];
             state.commentsError = errorMsg as string;
          })
+         .addCase(sendComment.pending, (state) => {
+            state.isSendingComment = true;
+         })
+         .addCase(sendComment.fulfilled, (state) => {
+            state.isSendingComment = false;
+            state.sendCommentError = "";
+         })
          .addCase(sendComment.rejected, (state, { payload: errorMsg }) => {
-            state.commentsError = errorMsg as string;
+            state.sendCommentError = errorMsg as string;
+            state.isSendingComment = false;
          });
    },
 });

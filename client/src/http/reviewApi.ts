@@ -5,7 +5,7 @@ export const createReview = async (
    rate: number,
    userId: number,
    deviceId: number
-): Promise<CreateReviewRes | null> => {
+): Promise<CreateReviewRes> => {
    try {
       const { data } = await $authHost.post<CreateReviewRes>("api/review/rate", {
          rate,
@@ -21,7 +21,7 @@ export const createReview = async (
          deviceRate: data.deviceRate,
       };
    } catch (error) {
-      return null;
+      throw new Error('Не удалось отправить рейтинг устройства')
    }
 };
 
@@ -29,7 +29,7 @@ export const createComment = async (
    comment: string,
    userId: number,
    deviceId: number
-): Promise<IComment | null> => {
+): Promise<IComment> => {
    try {
       const { data } = await $authHost.post<IComment>("api/review/comment", {
          comment,
@@ -44,11 +44,11 @@ export const createComment = async (
          userId: data.userId,
       };
    } catch (error) {
-      return null;
+      throw new Error('Не удалось отправить комментарий')
    }
 };
 
-export const fetchComments = async (deviceId: number): Promise<IComment[] | null> => {
+export const fetchComments = async (deviceId: number): Promise<IComment[]> => {
    try {
       const { data } = await $authHost.get<{ comments: IComment[]; count: number }>(
          `api/review/comment/${deviceId}`
@@ -56,6 +56,6 @@ export const fetchComments = async (deviceId: number): Promise<IComment[] | null
 
       return data.comments;
    } catch (error) {
-      return null;
+      throw new Error('Не удалось получить комментарии');
    }
 };
