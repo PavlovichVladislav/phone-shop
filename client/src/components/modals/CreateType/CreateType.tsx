@@ -18,9 +18,10 @@ export const CreateType: React.FC<Props> = ({ isShow, onClose }) => {
          .then(() => {
             setTypeName("");
             setQueryName("");
+            alert('Тип создан');
             onClose();
          })
-         .catch(() => setTypeName("ошибка"));
+         .catch(() => alert("ошибка"));
    };
 
    return (

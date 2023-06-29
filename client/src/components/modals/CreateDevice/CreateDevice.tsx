@@ -40,6 +40,16 @@ export const CreateDevice: React.FC<Props> = ({ isShow, onClose }) => {
          return;
       }
 
+      if (!img) {
+         alert("Необходимо выбрать изображение");
+         return;
+      }
+
+      if (!name || !price) {
+         alert("Необходимо указать стоимость и название");
+         return;
+      }
+
       createDevice({
          brnadId: `${brand.id}`,
          features,
@@ -47,7 +57,12 @@ export const CreateDevice: React.FC<Props> = ({ isShow, onClose }) => {
          name,
          price,
          typeId: `${type.id}`,
-      }).then(() => onClose());
+      })
+         .then(() => {
+            onClose();
+            alert("устройство создано");
+         })
+         .catch(() => alert("ошибка"));
    };
 
    return (

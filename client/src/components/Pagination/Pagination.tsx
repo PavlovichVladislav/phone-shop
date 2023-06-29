@@ -69,11 +69,11 @@ export const Paging: React.FC<Props> = ({ count, itemsInPage }) => {
                {i}
             </Pagination.Item>
          ))}
-         <Pagination.Last onClick={() => onPageClick(`${pages}`)} disabled={+curPage >= +pages} />
          <Pagination.Next
             onClick={() => onPageClick(`${+curPage + 1}`)}
             disabled={+curPage >= +pages}
          />
+         <Pagination.Last onClick={() => onPageClick(`${pages}`)} disabled={+curPage >= +pages} />
       </Pagination>
    );
 };

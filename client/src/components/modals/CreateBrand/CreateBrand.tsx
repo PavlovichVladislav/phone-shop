@@ -19,6 +19,7 @@ export const CreateBrand: React.FC<Props> = ({ isShow, onClose }) => {
          .then(() => {
             setBrandName("");
             setQueryName("");
+            alert('Бренд создан');
             onClose();
          })
          .catch(() => alert('Ошибка'));

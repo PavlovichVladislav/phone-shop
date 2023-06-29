@@ -8,13 +8,17 @@ import {
 } from "../models/AppModels";
 
 export const createType = async (name: string, query: string): Promise<ICategory> => {
-   const { data } = await $authHost.post<ICategory>("api/type/", { name, query });
+   try {
+      const { data } = await $authHost.post<ICategory>("api/type/", { name, query });
 
-   return {
-      id: data.id,
-      name: data.name,
-      query: data.query,
-   };
+      return {
+         id: data.id,
+         name: data.name,
+         query: data.query,
+      };
+   } catch (error) {
+      throw new Error("Не удалось создать устройство");
+   }
 };
 
 export const fetchTypes = async (): Promise<ICategory[]> => {
@@ -28,13 +32,17 @@ export const fetchTypes = async (): Promise<ICategory[]> => {
 };
 
 export const createBrand = async (name: string, query: string): Promise<ICategory> => {
-   const { data } = await $authHost.post<ICategory>("api/brand", { name, query });
+   try {
+      const { data } = await $authHost.post<ICategory>("api/brand", { name, query });
 
-   return {
-      id: data.id,
-      name: data.name,
-      query: data.query,
-   };
+      return {
+         id: data.id,
+         name: data.name,
+         query: data.query,
+      };
+   } catch (error) {
+      throw new Error("Не удалось создать бренд");
+   }
 };
 
 export const fetchBrands = async (): Promise<ICategory[]> => {
@@ -64,24 +72,28 @@ export const createDevice = async ({
    price,
    typeId,
 }: createDeviceParams): Promise<IDevice> => {
-   const formData = new FormData();
-   formData.append("name", name);
-   formData.append("price", price);
-   formData.append("img", img);
-   formData.append("brandId", brnadId);
-   formData.append("typeId", typeId);
-   formData.append("info", JSON.stringify(features));
+   try {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("price", price);
+      formData.append("img", img);
+      formData.append("brandId", brnadId);
+      formData.append("typeId", typeId);
+      formData.append("info", JSON.stringify(features));
 
-   const { data } = await $authHost.post<IDevice>("api/device", formData);
+      const { data } = await $authHost.post<IDevice>("api/device", formData);
 
-   return {
-      id: data.id,
-      name: data.name,
-      price: data.price,
-      img: data.img,
-      rating: data.rating,
-      info: data.info,
-   };
+      return {
+         id: data.id,
+         name: data.name,
+         price: data.price,
+         img: data.img,
+         rating: data.rating,
+         info: data.info,
+      };
+   } catch (error) {
+      throw new Error("Не удалось создать устройство");
+   }
 };
 
 export const fetchDevices = async ({
